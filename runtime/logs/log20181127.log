@@ -23,3 +23,4 @@ Key: 'auth.PassWord' Error:Field validation for 'PassWord' failed on the 'requir
 [INFO][user.go:81]2018/11/27 16:17:12 { }
 [INFO][user.go:83]2018/11/27 16:29:08 { }
 [ERROR][request.go:18]2018/11/27 16:29:08 record not found
+[INFO][user.go:30]2018/11/27 18:16:36 { }

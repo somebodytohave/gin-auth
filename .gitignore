@@ -10,3 +10,9 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# 自动生成的文档
+docs
+
+# 运行的日志 以及上传的图片
+runtime
