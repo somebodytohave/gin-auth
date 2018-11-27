@@ -1,0 +1,55 @@
+[INFO][request.go:11]2018/11/20 10:14:53 name 主题名称不能为空
+[INFO][request.go:11]2018/11/20 10:14:53 created_by 创建人不能为空
+[ERROR][request.go:18]2018/11/20 10:14:53 主题名称不能为空
+[INFO][topic.go:100]2018/11/20 10:21:33 {主题名称 1 0}
+[INFO][topic.go:94]2018/11/20 10:34:43 {主题名称 1 0}
+[INFO][topic.go:86]2018/11/20 10:38:30 { 0 0}
+[INFO][topic.go:95]2018/11/20 10:38:30 {主题名称 1 0}
+[INFO][topic.go:86]2018/11/20 10:41:31 { 0 0 }
+[INFO][topic.go:95]2018/11/20 10:41:31 {主题名称 1 1 }
+[INFO][topic.go:88]2018/11/20 11:51:25 { 0 0}
+[ERROR][request.go:18]2018/11/20 11:51:25 Key: 'DocAddTopic.Name' Error:Field validation for 'Name' failed on the 'required' tag
+[INFO][topic.go:88]2018/11/20 12:00:07 { 0 0}
+[INFO][topic.go:97]2018/11/20 12:00:07 { 1 0}
+[INFO][topic.go:88]2018/11/20 12:05:10 { 0 0}
+[INFO][topic.go:97]2018/11/20 12:05:10 { 1 0}
+[INFO][topic.go:87]2018/11/20 13:12:10 { 0 0}
+[INFO][topic.go:96]2018/11/20 13:12:10 { 1 0}
+[ERROR][request.go:18]2018/11/20 13:12:10 Key: 'DocAddTopic.Name' Error:Field validation for 'Name' failed on the 'required' tag
+[INFO][topic.go:87]2018/11/20 13:12:22 { 0 0}
+[INFO][topic.go:96]2018/11/20 13:12:22 {1 1 0}
+[INFO][topic.go:87]2018/11/20 13:13:00 { 0 0}
+[INFO][topic.go:96]2018/11/20 13:13:00 {1 1 0}
+[INFO][topic.go:172]2018/11/20 13:22:05 {1 主题名称 1 0}
+[INFO][topic.go:172]2018/11/20 13:22:20 {1 主题名称 1 0}
+[INFO][topic.go:172]2018/11/20 13:23:35 {1 主题名称 1 0}
+[INFO][topic.go:172]2018/11/20 13:34:23 {1 主题名称 1 0}
+[ERROR][request.go:18]2018/11/20 13:50:47 unexpected EOF
+[ERROR][request.go:18]2018/11/20 13:54:02 unexpected EOF
+[INFO][topic.go:160]2018/11/20 14:20:03 {0  0 -1}
+[INFO][topic.go:160]2018/11/20 14:20:36 {0  0 -1}
+[INFO][topic.go:174]2018/11/20 14:20:36 {1 主题名称 1 -1}
+[INFO][topic.go:161]2018/11/20 15:01:02 { 0}
+[INFO][topic.go:192]2018/11/20 15:01:02 {主题名称 1}
+[INFO][topic.go:161]2018/11/20 15:01:57 { 0}
+[INFO][topic.go:192]2018/11/20 15:01:57 {主题名称 1}
+[INFO][topic.go:161]2018/11/20 15:03:34 { 0}
+[INFO][topic.go:192]2018/11/20 15:03:34 {主题名称 1}
+[INFO][topic.go:107]2018/11/20 15:03:34 map[name:主题名称 modified_by:1]
+[INFO][topic.go:161]2018/11/20 15:04:20 { 0}
+[INFO][topic.go:192]2018/11/20 15:04:20 {主题名称 1}
+[INFO][topic.go:107]2018/11/20 15:04:20 -1
+[INFO][topic.go:108]2018/11/20 15:04:20 map[name:主题名称 modified_by:1]
+[INFO][topic.go:161]2018/11/20 15:07:00 { 0}
+[INFO][topic.go:192]2018/11/20 15:07:00 {主题名称 1}
+[INFO][topic.go:107]2018/11/20 15:07:00 0
+[INFO][topic.go:108]2018/11/20 15:07:00 map[name:主题名称 modified_by:1 state:0]
+[INFO][request.go:11]2018/11/20 15:11:18 id ID不能为空
+[INFO][request.go:11]2018/11/20 15:11:18 modified_by 修改人不能为空
+[INFO][request.go:11]2018/11/20 15:11:18 name 名称不能为空
+[INFO][topic.go:89]2018/11/20 15:14:34 { 0 0}
+[INFO][topic.go:98]2018/11/20 15:14:34 {主题名称 1 0}
+[INFO][topic.go:89]2018/11/20 15:24:44 { 0 0}
+[ERROR][request.go:18]2018/11/20 15:24:44 invalid character 's' looking for beginning of value
+[INFO][topic.go:88]2018/11/20 15:45:46 { 0 0}
+[INFO][topic.go:97]2018/11/20 15:45:46 {主题名称 1 0}

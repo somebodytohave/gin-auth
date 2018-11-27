@@ -1,0 +1,25 @@
+[INFO][request.go:11]2018/11/27 10:48:09 Username.Required Can not be empty
+[INFO][request.go:11]2018/11/27 10:48:09 Username.MinSize Minimum size is 2
+[INFO][request.go:11]2018/11/27 10:48:09 Password.MinSize Minimum size is 6
+[ERROR][request.go:18]2018/11/27 10:48:09 Can not be empty
+[INFO][request.go:11]2018/11/27 10:48:56 Username.Required Can not be empty
+[INFO][request.go:11]2018/11/27 10:48:56 Username.MinSize Minimum size is 2
+[INFO][request.go:11]2018/11/27 10:48:56 Password.MinSize Minimum size is 6
+[ERROR][request.go:18]2018/11/27 10:48:56 Can not be empty
+[INFO][request.go:11]2018/11/27 10:53:43 Username.Required Can not be empty
+[INFO][request.go:11]2018/11/27 10:53:43 Username.MinSize Minimum size is 2
+[INFO][request.go:11]2018/11/27 10:53:43 Password.MinSize Minimum size is 6
+[ERROR][request.go:18]2018/11/27 10:53:43 Can not be empty
+[INFO][request.go:11]2018/11/27 10:53:53 Username.Required Can not be empty
+[INFO][request.go:11]2018/11/27 10:53:53 Username.MinSize Minimum size is 2
+[INFO][request.go:11]2018/11/27 10:53:53 Password.MinSize Minimum size is 6
+[ERROR][request.go:18]2018/11/27 10:53:53 Can not be empty
+[INFO][user.go:79]2018/11/27 15:46:37 { }
+[INFO][user.go:81]2018/11/27 16:01:32 { }
+[INFO][user.go:81]2018/11/27 16:02:24 { }
+[INFO][user.go:81]2018/11/27 16:05:24 { }
+[ERROR][request.go:18]2018/11/27 16:05:24 Key: 'auth.UserName' Error:Field validation for 'UserName' failed on the 'required' tag
+Key: 'auth.PassWord' Error:Field validation for 'PassWord' failed on the 'required' tag
+[INFO][user.go:81]2018/11/27 16:17:12 { }
+[INFO][user.go:83]2018/11/27 16:29:08 { }
+[ERROR][request.go:18]2018/11/27 16:29:08 record not found
