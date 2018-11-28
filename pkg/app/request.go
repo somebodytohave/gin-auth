@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/astaxie/beego/validation"
-	"github.com/mecm/gin-blog/pkg/logging"
+	"github.com/mecm/gin-auth/pkg/logging"
 )
 
 // MarkValidErrors 将错误 存入日志

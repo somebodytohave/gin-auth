@@ -2,11 +2,11 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mecm/gin-blog/pkg/app"
-	"github.com/mecm/gin-blog/pkg/logging"
-	"github.com/mecm/gin-blog/pkg/util"
-	"github.com/mecm/gin-blog/pkg/valid"
-	"github.com/mecm/gin-blog/service/user_service"
+	"github.com/mecm/gin-auth/pkg/app"
+	"github.com/mecm/gin-auth/pkg/logging"
+	"github.com/mecm/gin-auth/pkg/util"
+	"github.com/mecm/gin-auth/pkg/valid"
+	"github.com/mecm/gin-auth/service/user_service"
 )
 
 type auth struct {
@@ -96,7 +96,7 @@ func Login(c *gin.Context) {
 		UserName: mAuth.UserName,
 		Password: mAuth.PassWord,
 	}
-
+	// 登录查询成功
 	if err := userService.Login(); err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return

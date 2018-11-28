@@ -3,10 +3,10 @@ package qrcode
 import (
 	"image/jpeg"
 	"github.com/boombuler/barcode"
-	"github.com/mecm/gin-blog/pkg/file"
-	"github.com/mecm/gin-blog/pkg/util"
+	"github.com/mecm/gin-auth/pkg/file"
+	"github.com/mecm/gin-auth/pkg/util"
 	"github.com/boombuler/barcode/qr"
-	"github.com/mecm/gin-blog/pkg/setting"
+	"github.com/mecm/gin-auth/pkg/setting"
 )
 
 const (

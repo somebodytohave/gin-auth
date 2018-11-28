@@ -3,7 +3,7 @@ package gredis
 import (
 	"encoding/json"
 	"github.com/gomodule/redigo/redis"
-	"github.com/mecm/gin-blog/pkg/setting"
+	"github.com/mecm/gin-auth/pkg/setting"
 	"time"
 )
 

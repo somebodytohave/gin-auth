@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/mecm/gin-blog/pkg/setting"
+	"github.com/mecm/gin-auth/pkg/setting"
 	"log"
 	"time"
 )

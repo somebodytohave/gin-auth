@@ -1,7 +1,7 @@
 package util
 
 import (
-	"github.com/mecm/gin-blog/pkg/setting"
+	"github.com/mecm/gin-auth/pkg/setting"
 
 	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"

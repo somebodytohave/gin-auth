@@ -2,11 +2,11 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "github.com/mecm/gin-blog/docs"
-	"github.com/mecm/gin-blog/middleware/jwt"
-	"github.com/mecm/gin-blog/pkg/setting"
-	"github.com/mecm/gin-blog/routers/api"
-	"github.com/mecm/gin-blog/routers/api/v1"
+	_ "github.com/mecm/gin-auth/docs"
+	"github.com/mecm/gin-auth/middleware/jwt"
+	"github.com/mecm/gin-auth/pkg/setting"
+	"github.com/mecm/gin-auth/routers/api"
+	"github.com/mecm/gin-auth/routers/api/v1"
 
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"

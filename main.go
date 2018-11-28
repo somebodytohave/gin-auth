@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/mecm/gin-blog/models"
-	"github.com/mecm/gin-blog/pkg/gredis"
-	"github.com/mecm/gin-blog/pkg/logging"
-	"github.com/mecm/gin-blog/pkg/setting"
-	"github.com/mecm/gin-blog/routers"
+	"github.com/mecm/gin-auth/models"
+	"github.com/mecm/gin-auth/pkg/gredis"
+	"github.com/mecm/gin-auth/pkg/logging"
+	"github.com/mecm/gin-auth/pkg/setting"
+	"github.com/mecm/gin-auth/routers"
 	"net/http"
 )
 
@@ -24,7 +24,6 @@ import (
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name jwtToken
-
 func main() {
 	setting.Setup()
 	models.Setup()

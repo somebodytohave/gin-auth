@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/mecm/gin-blog/pkg/file"
+	"github.com/mecm/gin-auth/pkg/file"
 )
 
 type Level int

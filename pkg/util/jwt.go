@@ -4,7 +4,7 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/mecm/gin-blog/pkg/setting"
+	"github.com/mecm/gin-auth/pkg/setting"
 )
 
 var jwtSecret = []byte(setting.AppSetting.JwtSecret)
@@ -32,7 +32,7 @@ func GenerateToken(username, password string) (string, error) {
 	claims := Claims{
 		username, password, jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer:    "gin-blog",
+			Issuer:    "gin-auth",
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

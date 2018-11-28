@@ -5,53 +5,43 @@ import (
 )
 
 type User struct {
-	ID       int    `gorm:"primary_key" json:"id"`
-	Username string `json:"username" gorm:"unique"`
-	Password string `json:"password" gorm:"unique"`
+	ID       uint   `gorm:"primary_key" json:"id"`
+	Nickname string `json:"nickname"`
 }
 
-func GetUser(id int) (*User, error) {
+func GetUser(id uint) (*User, error) {
 	var user User
 	err := db.Where("id = ? ", id).First(&user).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
 
-func AddUser(data map[string]interface{}) error {
-	user := User{
-		Username: data["username"].(string),
-		Password: data["password"].(string),
-	}
-	if err := db.Create(&user).Error; err != nil {
-		return err
-	}
-	return nil
-}
+// AddUser 新增用户信息
+func addUser(data map[string]interface{}, tx *gorm.DB) (uint, error) {
 
-func LoginUser(username string) (*User, error) {
 	user := User{
-		Username: username,
+		Nickname: data["nickname"].(string),
 	}
-	if err := db.Where("username = ? ", username).First(&user).Error; err != nil {
-		return nil, err
-	}
-	return &user, nil
 
+	if err := tx.Create(&user).Error; err != nil {
+		return 0, err
+	}
+	return user.ID, nil
 }
 
 // ExistUser 检查是否存在此用户
-func ExistUser(username, password string) (bool, error) {
-	var user User
-	err := db.Select("id").Where(User{Username: username, Password: password}).First(&user).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
-	}
+// func ExistUser(username, password string) (bool, error) {
+// 	var user User
+// 	err := db.Select("id").Where(User{Username: username, Password: password}).First(&user).Error
+// 	if err != nil && err != gorm.ErrRecordNotFound {
+// 		return false, err
+// 	}
 
-	if user.ID > 0 {
-		return true, nil
-	}
+// 	if user.ID > 0 {
+// 		return true, nil
+// 	}
 
-	return false, nil
-}
+// 	return false, nil
+// }

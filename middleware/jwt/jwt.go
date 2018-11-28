@@ -2,9 +2,9 @@ package jwt
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mecm/gin-blog/pkg/app"
-	"github.com/mecm/gin-blog/pkg/e"
-	"github.com/mecm/gin-blog/pkg/util"
+	"github.com/mecm/gin-auth/pkg/app"
+	"github.com/mecm/gin-auth/pkg/e"
+	"github.com/mecm/gin-auth/pkg/util"
 	"net/http"
 	"time"
 )
