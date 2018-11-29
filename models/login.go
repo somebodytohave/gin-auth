@@ -37,11 +37,9 @@ func AddUserLogin(userProfile, userLogin map[string]interface{}) error {
 }
 
 // LoginUserLogin 采用密码方式登录
-func LoginUserLogin(username string) (*UserLogin, error) {
-	user := UserLogin{
-		LoginName: username,
-	}
-	if err := db.Where("username = ? ", username).First(&user).Error; err != nil {
+func LoginUserLogin(maps map[string]interface{}) (*UserLogin, error) {
+	var user UserLogin
+	if err := db.Where(maps).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil

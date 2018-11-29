@@ -15,8 +15,8 @@ import (
 // @description 用户登录注册/认证示例 Golang语言编写 Gin框架
 // @termsOfService https://github.com/sun-wenming/gin-auth
 
-// @license.name MIT
-// @license.url https://github.com/sun-wenming/gin-auth/master/LICENSE
+// @license.name Apache License 2.0
+// @license.url https://github.com/sun-wenming/gin-auth/blob/master/LICENSE
 
 // @host localhost:8000
 // @BasePath

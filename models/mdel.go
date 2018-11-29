@@ -21,6 +21,7 @@ type Model struct {
 	DeletedAt  *time.Time `json:"deleted_at"`
 }
 
+// Setup gorm db 初始化
 func Setup() {
 	var err error
 	db, err = gorm.Open(setting.DatabaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",

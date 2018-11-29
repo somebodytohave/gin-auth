@@ -5,15 +5,15 @@ import (
 	"github.com/mecm/gin-auth/pkg/app"
 	"github.com/mecm/gin-auth/pkg/logging"
 	"github.com/mecm/gin-auth/pkg/util"
-	"github.com/mecm/gin-auth/pkg/valid"
+	"github.com/mecm/gin-auth/pkg/util/valid"
 	"github.com/mecm/gin-auth/service/user_service"
 )
 
 type auth struct {
 	// UserName 用户名
-	UserName string `json:"username" example:"zhangsan" validate:"required,gte=5,lte=50"`
+	UserName string `json:"username" example:"zhangsan" validate:"required,gte=5,lte=30"`
 	// PassWord 密码
-	PassWord string `json:"password" example:"zhangsan" validate:"required,gte=5,lte=50"`
+	PassWord string `json:"password" example:"zhangsan" validate:"required,gte=5,lte=30"`
 }
 
 // Register 注册新用户
@@ -42,20 +42,22 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	userService := user_service.User{UserName: mAuth.UserName, Password: mAuth.PassWord}
-	if err := userService.Register(); err != nil {
-		logging.Info(err)
-		appG.ResponseFailMsg(err.Error())
-		return
-	}
-
+	// 加密
 	password, err := util.Encrypt(mAuth.PassWord)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
 
-	// 注册成功之后
+	// 注册
+	userService := user_service.User{UserName: mAuth.UserName, Password: password}
+	if err := userService.Register(); err != nil {
+		logging.Info(err)
+		appG.ResponseFailMsg(err.Error())
+		return
+	}
+
+	// 注册成功之后 make token
 	token, err := util.GenerateToken(mAuth.UserName, password)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
@@ -102,13 +104,13 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// auth
+	// 加密
 	password, err := util.Encrypt(mAuth.PassWord)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
-
+	// 生成token
 	token, err := util.GenerateToken(mAuth.UserName, password)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())

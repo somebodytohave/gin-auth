@@ -11,6 +11,11 @@ const (
 	ERROR_AUTH_CHECK_TOKEN_TIMEOUT = 20002
 	ERROR_AUTH_TOKEN               = 20003
 	ERROR_AUTH                     = 20004
+
+	// --- 客户端错误
+	ERROR_USER_GET_INFO = 40001
+	ERROR_USER_REG_NAME = 40002
+	// --- end
 )
 
 var MsgFlags = map[int]string{
@@ -22,6 +27,8 @@ var MsgFlags = map[int]string{
 	ERROR_AUTH_CHECK_TOKEN_TIMEOUT: "Token已超时",
 	ERROR_AUTH_TOKEN:               "Token生成失败",
 	ERROR_AUTH:                     "Token错误",
+	ERROR_USER_GET_INFO:            "40001: 获取到用户信息失败.",
+	ERROR_USER_REG_NAME:            "40002: 用户输入格式错误.",
 }
 
 func GetMsg(code int) string {

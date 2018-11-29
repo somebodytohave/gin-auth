@@ -4,11 +4,13 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// User 用户信息表
 type User struct {
-	ID       uint   `gorm:"primary_key" json:"id"`
+	gorm.Model
 	Nickname string `json:"nickname"`
 }
 
+// GetUser 获取用户信息
 func GetUser(id uint) (*User, error) {
 	var user User
 	err := db.Where("id = ? ", id).First(&user).Error
@@ -31,17 +33,15 @@ func addUser(data map[string]interface{}, tx *gorm.DB) (uint, error) {
 	return user.ID, nil
 }
 
-// ExistUser 检查是否存在此用户
-// func ExistUser(username, password string) (bool, error) {
-// 	var user User
-// 	err := db.Select("id").Where(User{Username: username, Password: password}).First(&user).Error
-// 	if err != nil && err != gorm.ErrRecordNotFound {
-// 		return false, err
-// 	}
-
-// 	if user.ID > 0 {
-// 		return true, nil
-// 	}
-
-// 	return false, nil
-// }
+// ExistUserByID 检查是否存在此用户
+func ExistUserByID(id uint) (bool, error) {
+	var user User
+	err := db.Select("id").Where("id = ? ", id).First(&user).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, err
+	}
+	if user.ID > 0 {
+		return true, nil
+	}
+	return false, nil
+}
