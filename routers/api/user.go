@@ -52,20 +52,17 @@ func Register(c *gin.Context) {
 	// 注册
 	userService := user_service.User{UserName: mAuth.UserName, Password: password}
 	if err := userService.Register(); err != nil {
-		logging.Info(err)
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
 
 	// 注册成功之后 make token
-	token, err := util.GenerateToken(mAuth.UserName, password)
+	token, err := util.GenerateToken(mAuth.UserName, mAuth.PassWord)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
-
 	appG.ResponseSuc(token)
-
 }
 
 // Login 登录
@@ -79,7 +76,6 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	appG := app.GetGin(c)
 	var mAuth auth
-	logging.Info(mAuth)
 
 	// 解析 body json 数据到实体类
 	if err := c.ShouldBindJSON(&mAuth); err != nil {
@@ -104,14 +100,8 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// 加密
-	password, err := util.Encrypt(mAuth.PassWord)
-	if err != nil {
-		appG.ResponseFailMsg(err.Error())
-		return
-	}
 	// 生成token
-	token, err := util.GenerateToken(mAuth.UserName, password)
+	token, err := util.GenerateToken(mAuth.UserName, mAuth.PassWord)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return

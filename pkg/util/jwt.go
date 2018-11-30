@@ -19,7 +19,12 @@ type Claims struct {
 // GenerateToken 生成 token
 func GenerateToken(username, password string) (string, error) {
 
-	password, err := Encrypt(password)
+	var err error
+	username, err = Encrypt(username)
+	if err != nil {
+		return "", err
+	}
+	password, err = Encrypt(password)
 	if err != nil {
 		return "", err
 	}

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/mecm/gin-auth/pkg/logging"
 	"github.com/mecm/gin-auth/pkg/setting"
-	"log"
 	"time"
 )
 
@@ -31,7 +31,7 @@ func Setup() {
 		setting.DatabaseSetting.Name))
 
 	if err != nil {
-		log.Println(err)
+		logging.Error(err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
