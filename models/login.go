@@ -1,5 +1,10 @@
 package models
 
+import (
+	"fmt"
+	"github.com/jinzhu/gorm"
+)
+
 // UserLogin 用户密码登陆认证
 type UserLogin struct {
 	ID         uint `gorm:"primary_key"`
@@ -22,12 +27,28 @@ func AddUserLogin(userProfile, userLogin map[string]interface{}) error {
 		tx.Rollback()
 		return err
 	}
+	fmt.Println(userLogin)
 
 	loginInfo := UserLogin{
-		UserID:    userID,
-		LoginName: userLogin["username"].(string),
-		Password:  userLogin["password"].(string),
+		UserID:   userID,
+		Password: userLogin["password"].(string),
 	}
+
+	fmt.Println(userLogin["login_name"])
+	if userLogin["login_name"] != nil {
+		loginInfo.LoginName = userLogin["login_name"].(string)
+		goto InsertLogin
+	}
+	if userLogin["login_phone"] != nil {
+		loginInfo.LoginPhone = userLogin["login_phone"].(string)
+		goto InsertLogin
+	}
+	if userLogin["login_email"] != nil {
+		loginInfo.LoginEmail = userLogin["login_email"].(string)
+	}
+InsertLogin:
+	fmt.Println(loginInfo)
+
 	if err := tx.Create(&loginInfo).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -45,16 +66,17 @@ func LoginUserLogin(maps map[string]interface{}) (*UserLogin, error) {
 	return &user, nil
 }
 
-// func ExistUser(username, password string) (bool, error) {
-// 	var user User
-// 	err := db.Select("id").Where(User{Username: username, Password: password}).First(&user).Error
-// 	if err != nil && err != gorm.ErrRecordNotFound {
-// 		return false, err
-// 	}
+// ExistUserLogin 判断用户账号是否存在
+func ExistUserLogin(maps map[string]interface{}) (bool, error) {
+	var user UserLogin
+	err := db.Select("id").Where(maps).First(&user).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, err
+	}
 
-// 	if user.ID > 0 {
-// 		return true, nil
-// 	}
+	if user.ID > 0 {
+		return true, nil
+	}
 
-// 	return false, nil
-// }
+	return false, nil
+}

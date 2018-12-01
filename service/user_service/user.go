@@ -21,12 +21,18 @@ type User struct {
 func (u *User) Register() error {
 
 	maps := make(map[string]interface{})
-
 	maps, err := u.validUserName(maps)
 	if err != nil {
 		return err
 	}
-	maps["password"] = u.Password
+
+	// 加密
+	password, err := util.Encrypt(u.Password)
+	if err != nil {
+		return err
+	}
+
+	maps["password"] = password
 
 	// 用户信息
 	userProfile := map[string]interface{}{
@@ -62,7 +68,7 @@ func (u *User) Login() error {
 	if !(user.UserID > 0) {
 		return errors.New(e.GetMsg(e.ERROR_USER_GET_INFO))
 	}
-	// 匹配正常 根据 userID 查询 用户信息
+
 	exist, err := models.ExistUserByID(user.UserID)
 	if err != nil {
 		return err
@@ -75,9 +81,15 @@ func (u *User) Login() error {
 	return nil
 }
 
-// ExistByID 存在 by id
-func (u *User) ExistByID() (bool, error) {
-	return models.ExistUserByID(u.ID)
+// ExistByName 是否存在
+func (u *User) ExistByName() (bool, error) {
+	maps := make(map[string]interface{})
+
+	maps, err := u.validUserName(maps)
+	if err != nil {
+		return true, err
+	}
+	return models.ExistUserLogin(maps)
 }
 
 // 验证 用户名类型

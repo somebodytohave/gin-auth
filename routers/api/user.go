@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mecm/gin-auth/pkg/app"
+	"github.com/mecm/gin-auth/pkg/e"
 	"github.com/mecm/gin-auth/pkg/logging"
 	"github.com/mecm/gin-auth/pkg/util"
 	"github.com/mecm/gin-auth/pkg/util/valid"
@@ -42,15 +43,19 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// 加密
-	password, err := util.Encrypt(mAuth.PassWord)
+	// 注册
+	userService := user_service.User{UserName: mAuth.UserName, Password: mAuth.UserName}
+
+	exist, err := userService.ExistByName()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
+	if exist {
+		appG.ResponseFailMsg(e.GetMsg(e.ERROR_USER_NAME_EXIST))
+		return
+	}
 
-	// 注册
-	userService := user_service.User{UserName: mAuth.UserName, Password: password}
 	if err := userService.Register(); err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
@@ -94,6 +99,7 @@ func Login(c *gin.Context) {
 		UserName: mAuth.UserName,
 		Password: mAuth.PassWord,
 	}
+
 	// 登录查询成功
 	if err := userService.Login(); err != nil {
 		appG.ResponseFailMsg(err.Error())

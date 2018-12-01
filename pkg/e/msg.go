@@ -13,8 +13,9 @@ const (
 	ERROR_AUTH                     = 20004
 
 	// --- 客户端错误
-	ERROR_USER_GET_INFO = 40001
-	ERROR_USER_REG_NAME = 40002
+	ERROR_USER_GET_INFO   = 40001
+	ERROR_USER_REG_NAME   = 40002
+	ERROR_USER_NAME_EXIST = 40003
 	// --- end
 )
 
@@ -29,6 +30,7 @@ var MsgFlags = map[int]string{
 	ERROR_AUTH:                     "Token错误",
 	ERROR_USER_GET_INFO:            "40001: 获取到用户信息失败.",
 	ERROR_USER_REG_NAME:            "40002: 用户输入格式错误.",
+	ERROR_USER_NAME_EXIST:          "40003: 用户名已存在.",
 }
 
 func GetMsg(code int) string {
