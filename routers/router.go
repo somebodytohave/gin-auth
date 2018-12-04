@@ -31,9 +31,8 @@ func InitRouter() *gin.Engine {
 		}
 
 		apiv1 := root.Group("/api/v1")
-		if !setting.AppSetting.Debug {
-			apiv1.Use(jwt.JWT())
-		}
+
+		apiv1.Use(jwt.JWT())
 		{
 			apiv1.GET("/test", v1.TestAuth)
 		}

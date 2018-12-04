@@ -4,13 +4,14 @@
 
 更多相关项目流程参考[流程图](https://github.com/sun-wenming/gin-auth/blob/master/user.xmind)
 
-1. 建立通用用户表的增删改查
+1. 建立用户表的增删改查
    - user 用户储存用户的相关信息，不包含敏感信息。(用户名,密码等)
    - user_login 管理用户密码的登录操作,最终关联到 `user` 表查询数据
    - user_oauth 管理用户第三方登录的信息,类似`user_login` (待完善)
 2. 注册功能
    - 账号密码 (加密)
    - 第三方注册(待完善)
+   - 手机号注册(待完善)
 3. 登录功能
 4. JWt 认证功能
 
