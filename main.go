@@ -6,6 +6,7 @@ import (
 	"github.com/mecm/gin-auth/models"
 	"github.com/mecm/gin-auth/pkg/gredis"
 	"github.com/mecm/gin-auth/pkg/logging"
+	"github.com/mecm/gin-auth/pkg/oauth"
 	"github.com/mecm/gin-auth/pkg/setting"
 	"github.com/mecm/gin-auth/routers"
 	"net/http"
@@ -33,6 +34,8 @@ func main() {
 	if err != nil {
 		logging.Warn(err)
 	}
+	oauth.Setup()
+
 	// endless.DefaultReadTimeOut = setting.ReadTimeout
 	// endless.DefaultWriteTimeOut = setting.WriteTimeout
 	// endless.DefaultMaxHeaderBytes = 1 << 20

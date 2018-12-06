@@ -17,6 +17,8 @@ type auth struct {
 	PassWord string `json:"password" example:"zhangsan" validate:"required,gte=5,lte=30"`
 	// Type 类型 1：账号密码 2：手机号 3：第三方
 	Type int `json:"type" example:"1" validate:"required,oneof=1 2 3"`
+	// Type 类型 为手机号(2)时,需要传入code
+	Code int `json:"code" example:"123456"`
 }
 
 // Register 注册新用户
@@ -116,4 +118,12 @@ func Login(c *gin.Context) {
 	}
 
 	appG.ResponseSuc(token)
+}
+
+// 发送手机验证码
+func SendCode(c *gin.Context) {
+	appG := app.GetGin(c)
+	code := util.GetRandomCode()
+	appG.ResponseSuc(code)
+
 }

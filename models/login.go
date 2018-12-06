@@ -12,8 +12,13 @@ type UserLogin struct {
 	LoginName  string `gorm:"unique"`
 	LoginEmail string `gorm:"unique"`
 	LoginPhone string `gorm:"unique"`
-	Password   string `gorm:"unique"`
+	Password   string
 	status     uint
+}
+
+// 验证码登录
+func codeLogin() {
+
 }
 
 // AddUserLogin 添加用户账号 与 初始化个人信息

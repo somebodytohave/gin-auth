@@ -24,10 +24,18 @@ func InitRouter() *gin.Engine {
 	root := r.Group("")
 	{
 		// 用户账号
-		account := root.Group("/auth")
+		auth := root.Group("/auth")
 		{
-			account.POST("/register", api.Register)
-			account.POST("/login", api.Login)
+			auth.POST("/register", api.Register)
+			auth.POST("/login", api.Login)
+			auth.POST("/code", api.SendCode)
+		}
+
+		// 用户账号
+		oauth := root.Group("/oauth")
+		{
+			oauth.GET("/github", api.LoginGithub)
+			oauth.GET("/github/callback", api.CallBackGithub)
 		}
 
 		apiv1 := root.Group("/api/v1")
