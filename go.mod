@@ -5,6 +5,7 @@ require (
 	github.com/astaxie/beego v1.11.0
 	github.com/boombuler/barcode v1.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
 	github.com/go-ini/ini v1.39.0
@@ -26,10 +27,11 @@ require (
 	github.com/swaggo/gin-swagger v1.0.0
 	github.com/swaggo/swag v1.4.0
 	github.com/ugorji/go/codec v0.0.0-20181127175209-856da096dbdf // indirect
+	github.com/urfave/cli v1.20.0 // indirect
 	github.com/uudashr/gopkgs v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20181127143415-eb0de9b17e85
 	golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890
-	golang.org/x/tools v0.0.0-20181127232545-e782529d0ddd // indirect
+	golang.org/x/tools v0.0.0-20181205224935-3576414c54a4 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	gopkg.in/go-playground/validator.v9 v9.23.0
 )

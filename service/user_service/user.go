@@ -1,6 +1,11 @@
 package user_service
 
 import (
+	"fmt"
+	"encoding/json"
+	"github.com/mecm/gin-auth/pkg/logging"
+	"github.com/mecm/gin-auth/pkg/gredis"
+	"github.com/mecm/gin-auth/service/cache_service"
 	"errors"
 	"github.com/mecm/gin-auth/models"
 	"github.com/mecm/gin-auth/pkg/e"
@@ -15,11 +20,11 @@ type User struct {
 	UserName string
 	Password string
 	NickName string
+	Code string
 }
 
 // Register 注册用户
 func (u *User) Register() error {
-
 	maps := make(map[string]interface{})
 	maps, err := u.validUserName(maps)
 	if err != nil {
@@ -34,12 +39,8 @@ func (u *User) Register() error {
 
 	maps["password"] = password
 
-	// 用户信息
-	userProfile := map[string]interface{}{
-		"nickname": u.NickName,
-	}
 	// 创建 用户信息 与 用户密码
-	return models.AddUserLogin(userProfile, maps)
+	return models.AddUserLogin(maps)
 }
 
 // Login 登录用户
@@ -81,6 +82,55 @@ func (u *User) Login() error {
 	return nil
 }
 
+// PhoneRegister 手机号注册
+func (u *User)PhoneRegister() error{
+
+	maps := map[string]interface{}{
+		"login_phone":u.UserName,
+	}
+	// 创建 用户信息 与 用户密码
+	return models.AddUserLogin(maps)
+	
+}
+
+// SendCode 发送手机验证码
+func SendCode(phone string)(string,error){
+	var ( code string 
+		err error )
+	code =  GetCacheCode(phone)
+	// 如果没有验证码,随机生成
+	if code == ""{
+		code = util.GetRandomCode()
+	}
+
+	cache:= cache_service.Phone{Phone:phone}
+	key := cache.GetPhoneCodeKey()
+
+	// 发送验证码操作
+	// 十分钟验证码缓存
+	if err := gredis.Set(key, code, 600);err != nil{
+		logging.Warn(e.CACHE_ERROR_SET, err)
+	}
+	// 便于测试，code返回出去
+	return code,err	
+}
+
+func GetCacheCode(phone string)(string){
+	cache:= cache_service.Phone{Phone:phone}
+	key := cache.GetPhoneCodeKey()
+	fmt.Println(key)
+	if !gredis.Exists(key){
+		return ""
+	}
+	var code string
+	data, err := gredis.Get(key)
+	if err != nil {
+		logging.Warn(e.CACHE_ERROR_GET, err)
+		return ""
+	} 
+	json.Unmarshal(data, &code)
+	return code
+}
 // ExistByName 是否存在
 func (u *User) ExistByName() (bool, error) {
 	maps := make(map[string]interface{})
@@ -98,6 +148,7 @@ func (u *User) validUserName(maps map[string]interface{}) (map[string]interface{
 		maps["login_email"] = u.UserName
 		return maps, nil
 	}
+	// 如果是手机号
 	if reg.Phone(u.UserName) {
 		maps["login_phone"] = u.UserName
 		return maps, nil

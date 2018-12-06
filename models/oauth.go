@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -16,12 +17,12 @@ type UserOatuh struct {
 }
 
 // AddUserOatuh 添加用户账号 与 初始化个人信息
-func AddUserOatuh(userProfile, userOatuh map[string]interface{}) error {
+func AddUserOatuh(userOatuh map[string]interface{}) error {
 
 	tx := db.Begin()
 
 	// 首先创建 user
-	userID, err := addUser(userProfile, tx)
+	userID, err := addUser(tx)
 	if err != nil {
 		tx.Rollback()
 		return err

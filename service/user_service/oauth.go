@@ -18,14 +18,9 @@ type UserOatuh struct {
 func (o UserOatuh) LoginGithub() error {
 	maps := make(map[string]interface{})
 
-	// 用户信息
-	userProfile := map[string]interface{}{
-		"nickname": o.NickName,
-	}
-
 	maps["access_token"] = o.OauthAccessToken
 	maps["oauth_type"] = o.OauthType
 	maps["expires"] = o.OauthExpires
 
-	return models.AddUserOatuh(userProfile, maps)
+	return models.AddUserOatuh(maps)
 }

@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -22,12 +23,12 @@ func codeLogin() {
 }
 
 // AddUserLogin 添加用户账号 与 初始化个人信息
-func AddUserLogin(userProfile, userLogin map[string]interface{}) error {
+func AddUserLogin(userLogin map[string]interface{}) error {
 
 	tx := db.Begin()
 
 	// 首先创建 user
-	userID, err := addUser(userProfile, tx)
+	userID, err := addUser(tx)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -35,11 +36,13 @@ func AddUserLogin(userProfile, userLogin map[string]interface{}) error {
 	fmt.Println(userLogin)
 
 	loginInfo := UserLogin{
-		UserID:   userID,
-		Password: userLogin["password"].(string),
+		UserID: userID,
 	}
 
-	fmt.Println(userLogin["login_name"])
+	if userLogin["password"] != nil {
+		loginInfo.Password = userLogin["password"].(string)
+	}
+
 	if userLogin["login_name"] != nil {
 		loginInfo.LoginName = userLogin["login_name"].(string)
 		goto InsertLogin

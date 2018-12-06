@@ -21,12 +21,8 @@ func GetUser(id uint) (*User, error) {
 }
 
 // AddUser 新增用户信息
-func addUser(data map[string]interface{}, tx *gorm.DB) (uint, error) {
-
-	user := User{
-		Nickname: data["nickname"].(string),
-	}
-
+func addUser(tx *gorm.DB) (uint, error) {
+	var user User
 	if err := tx.Create(&user).Error; err != nil {
 		return 0, err
 	}

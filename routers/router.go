@@ -29,6 +29,7 @@ func InitRouter() *gin.Engine {
 			auth.POST("/register", api.Register)
 			auth.POST("/login", api.Login)
 			auth.POST("/code", api.SendCode)
+			auth.POST("/phonelogin", api.PhoneLogin)
 		}
 
 		// 用户账号
