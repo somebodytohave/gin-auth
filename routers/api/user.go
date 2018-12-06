@@ -120,10 +120,17 @@ func Login(c *gin.Context) {
 	appG.ResponseSuc(token)
 }
 
-// 发送手机验证码
+// SendCode 发送手机验证码
+// @Summary 发送手机验证码
+// @accept application/x-www-form-urlencoded
+// @Tags auth
+// @Produce  json
+// @Param phone formData string true "手机号"
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /auth/code [post]
 func SendCode(c *gin.Context) {
 	appG := app.GetGin(c)
+	phone := c.PostForm("phone")
 	code := util.GetRandomCode()
-	appG.ResponseSuc(code)
-
+	appG.ResponseSuc(phone)
 }
