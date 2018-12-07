@@ -15,7 +15,7 @@
    - 账号密码注册 [Register](https://github.com/sun-wenming/gin-auth/blob/a860d38995a027c328722e4e23d435a21cbdd6e1/routers/api/user.go#L28)
    - 获取用户信息 [GetUserInfo](https://github.com/sun-wenming/gin-auth/blob/a860d38995a027c328722e4e23d435a21cbdd6e1/routers/api/user.go#L224)
    - github 登录 [LoginGithub](https://github.com/sun-wenming/gin-auth/blob/a860d38995a027c328722e4e23d435a21cbdd6e1/routers/api/oauth.go#L19)
-     - **(待解决服务器重启之后,浏览器会有缓存,导致 callback 携带的缓存<br> state 随机码与 oauthStateString 对应不上 [oauthStateString ](https://github.com/sun-wenming/gin-auth/blob/a860d38995a027c328722e4e23d435a21cbdd6e1/routers/api/oauth.go#L32)) 求解答**
+     - **(待解决服务器重启之后(Ctrl+C 结束程序),浏览器会有缓存,导致 callback 携带的缓存<br> state 随机码与 oauthStateString 对应不上 [oauthStateString ](https://github.com/sun-wenming/gin-auth/blob/a860d38995a027c328722e4e23d435a21cbdd6e1/routers/api/oauth.go#L32)) 求解答**
 3. JWt 认证功能
 
 ### 运行步骤:
