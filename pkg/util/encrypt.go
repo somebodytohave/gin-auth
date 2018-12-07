@@ -27,7 +27,7 @@ func Compare(inputPwd, hashPwd string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashPwd), []byte(inputPwd))
 }
 
-var key = []byte("the-key-has-to-be-32-bytes-long!")
+var key = []byte("32-bytes-key-sui-ji-fhaso!nislfg")
 
 // AesEncrypt Aes 加密
 func AesEncrypt(plaintext []byte) ([]byte, error) {
