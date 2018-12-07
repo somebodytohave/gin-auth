@@ -27,8 +27,8 @@ import (
 // @name jwtToken
 func main() {
 	setting.Setup()
-	models.Setup()
 	logging.Setup()
+	models.Setup()
 	// 缓存 redis
 	err := gredis.Setup()
 	if err != nil {

@@ -1,11 +1,11 @@
 package api
 
 import (
-	"github.com/mecm/gin-auth/pkg/util/reg"
 	"github.com/gin-gonic/gin"
 	"github.com/mecm/gin-auth/pkg/app"
 	"github.com/mecm/gin-auth/pkg/e"
 	"github.com/mecm/gin-auth/pkg/util"
+	"github.com/mecm/gin-auth/pkg/util/reg"
 	"github.com/mecm/gin-auth/pkg/util/valid"
 	"github.com/mecm/gin-auth/service/user_service"
 )
@@ -15,8 +15,6 @@ type auth struct {
 	UserName string `json:"username" example:"zhangsan" validate:"required,gte=5,lte=30"`
 	// PassWord 密码
 	PassWord string `json:"password" example:"zhangsan" validate:"required,gte=5,lte=30"`
-	// Type 类型 1：账号密码 2：手机号 3：第三方
-	Type int `json:"type" example:"1" validate:"required,oneof=1 2 3"`
 }
 
 // Register 注册新用户
@@ -46,6 +44,7 @@ func Register(c *gin.Context) {
 
 	userService := user_service.User{UserName: mAuth.UserName, Password: mAuth.UserName}
 
+	// 判断是否存在
 	exist, err := userService.ExistByName()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
@@ -117,7 +116,6 @@ func Login(c *gin.Context) {
 	appG.ResponseSuc(token)
 }
 
-
 type phone struct {
 	// Phone 手机号
 	Phone string `json:"phone" example:"13938738804" validate:"required"`
@@ -150,32 +148,33 @@ func PhoneLogin(c *gin.Context) {
 		return
 	}
 
-	if !reg.Phone(mAuth.Phone){
+	if !reg.Phone(mAuth.Phone) {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_NOT_VALID)
 		return
 	}
 
 	// 验证验证码
 	code := user_service.GetCacheCode(mAuth.Phone)
-	if code ==""{
+	if code == "" {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_CODE_EXPIRED)
 		return
 	}
-	if mAuth.Code != code{
+	if mAuth.Code != code {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_CODE_NOT_VALID)
 		return
-	} 
+	}
 
 	userService := user_service.User{UserName: mAuth.Phone, Code: mAuth.Code}
 
+	// 判断是否存在
 	exist, err := userService.ExistByName()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
-	
-	if !exist {// 注册
-		if err := userService.PhoneRegister();err !=nil{
+
+	if !exist { // 注册
+		if err := userService.PhoneRegister(); err != nil {
 			appG.ResponseFailMsg(err.Error())
 			return
 		}
@@ -190,8 +189,6 @@ func PhoneLogin(c *gin.Context) {
 	appG.ResponseSuc(token)
 }
 
-
-
 // SendCode 发送手机验证码
 // @Summary 发送手机验证码
 // @accept application/x-www-form-urlencoded
@@ -203,14 +200,47 @@ func PhoneLogin(c *gin.Context) {
 func SendCode(c *gin.Context) {
 	appG := app.GetGin(c)
 	phone := c.PostForm("phone")
-	code,err := user_service.SendCode(phone)
-	if !reg.Phone(phone){
+	code, err := user_service.SendCode(phone)
+	if !reg.Phone(phone) {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_NOT_VALID)
 		return
 	}
 
-	if err !=nil{
+	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 	}
 	appG.ResponseSuc(code)
+}
+
+// GetUserInfo 获取用户信息
+// @Summary 获取用户信息
+// @accept application/x-www-form-urlencoded
+// @Security ApiKeyAuth
+// @Tags user
+// @Produce  json
+// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/user/getUserInfo [post]
+func GetUserInfo(c *gin.Context) {
+	appG := app.GetGin(c)
+	claims := getTokenInfo(c)
+	aesUsername, err := util.AesDecrypt(claims.Username)
+	if err != nil {
+		appG.ResponseFailMsg(err.Error())
+		return
+	}
+	username := string(aesUsername)
+	userService := user_service.User{UserName: username}
+
+	user, err := userService.GetUserInfo()
+	if err != nil {
+		appG.ResponseFailMsg(err.Error())
+		return
+	}
+	appG.ResponseSuc(user)
+}
+
+func getTokenInfo(c *gin.Context) *util.Claims {
+	token := c.Request.Header.Get("jwtToken")
+	claims, _ := util.ParseToken(token)
+	return claims
 }

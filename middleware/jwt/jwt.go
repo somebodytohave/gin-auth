@@ -13,7 +13,6 @@ import (
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		appG := app.GetGin(c)
-
 		var code int
 		var data interface{}
 		code = e.SUCCESS

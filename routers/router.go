@@ -39,11 +39,18 @@ func InitRouter() *gin.Engine {
 			oauth.GET("/github/callback", api.CallBackGithub)
 		}
 
+		// apiv1
 		apiv1 := root.Group("/api/v1")
 
 		apiv1.Use(jwt.JWT())
 		{
 			apiv1.GET("/test", v1.TestAuth)
+
+			// 用户
+			user := apiv1.Group("/user")
+			{
+				user.POST("/getUserInfo", api.GetUserInfo)
+			}
 		}
 
 	}
