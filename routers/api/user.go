@@ -17,8 +17,8 @@ type auth struct {
 	PassWord string `json:"password" example:"zhangsan" validate:"required,gte=5,lte=30"`
 }
 
-// Register 注册新用户
-// @Summary 注册新用户
+// Register 账号密码注册
+// @Summary 账号密码注册
 // @accept application/x-www-form-urlencoded
 // @Tags auth
 // @Produce  json
@@ -70,8 +70,8 @@ func Register(c *gin.Context) {
 	appG.ResponseSuc(token)
 }
 
-// Login 登录
-// @Summary 登录
+// Login 账号密码登录
+// @Summary 账号密码登录
 // @accept application/x-www-form-urlencoded
 // @Tags auth
 // @Produce  json
@@ -123,8 +123,9 @@ type phone struct {
 	Code string `json:"code" example:"123456" validate:"required"`
 }
 
-// PhoneLogin 手机号快速登陆
-// @Summary 手机号快速登陆
+// PhoneLogin 手机号快速登陆/注册
+// @Summary 手机号快速登陆/注册
+// @Document 如果登录手机号未注册,则自动注册再登录
 // @accept application/x-www-form-urlencoded
 // @Tags auth
 // @Produce  json

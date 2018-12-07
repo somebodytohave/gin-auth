@@ -4,10 +4,11 @@ import (
 	"github.com/mecm/gin-auth/models"
 )
 
-// UserOatuh UserOatuh
-type UserOatuh struct {
+// UserOauth UserOauth
+type UserOauth struct {
 	ID               uint
 	OauthType        uint
+	OauthID          string
 	OauthAccessToken string
 	OauthExpires     string
 	NickName         string
@@ -15,12 +16,18 @@ type UserOatuh struct {
 }
 
 // LoginGithub 注册认证登录
-func (o UserOatuh) LoginGithub() error {
+func (o UserOauth) LoginGithub() error {
 	maps := make(map[string]interface{})
 
-	maps["access_token"] = o.OauthAccessToken
+	maps["oauth_id"] = o.OauthID
 	maps["oauth_type"] = o.OauthType
+	maps["access_token"] = o.OauthAccessToken
 	maps["expires"] = o.OauthExpires
 
-	return models.AddUserOatuh(maps)
+	return models.AddUserOauth(maps)
+}
+
+func (o UserOauth) ExistUserOauth() (bool, error) {
+	maps := map[string]interface{}{"oauth_id": o.OauthID}
+	return models.ExistUserOauth(maps)
 }

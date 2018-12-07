@@ -7,13 +7,15 @@ import (
 	"github.com/mecm/gin-auth/pkg/app"
 	"github.com/mecm/gin-auth/pkg/oauth"
 	"github.com/mecm/gin-auth/pkg/util"
+	"github.com/mecm/gin-auth/service/user_service"
 	"golang.org/x/oauth2"
 	"net/http"
+	"strconv"
 )
 
 var oauthStateString = "random-user"
 
-// LoginGithub github登录
+// LoginGithub github登录/注册
 func LoginGithub(c *gin.Context) {
 	oauthStateString = util.GetRandomSalt()
 	url := oauth.GithubOauthConfig.AuthCodeURL(oauthStateString, oauth2.AccessTypeOnline)
@@ -24,17 +26,21 @@ func LoginGithub(c *gin.Context) {
 func CallBackGithub(c *gin.Context) {
 	state, _ := c.GetQuery("state")
 	code, _ := c.GetQuery("code")
+	appG := app.GetGin(c)
 
+	// TODO 如果服务器重启了, oauthStateString就失效了
 	if state != oauthStateString {
-		fmt.Printf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		err := fmt.Sprintf("invalid oauth state, expected '%s', got '%s'\n", oauthStateString, state)
+		appG.ResponseFailMsg(err)
+		// c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 
 	token, err := oauth.GithubOauthConfig.Exchange(oauth2.NoContext, code)
 	if err != nil {
 		fmt.Printf("oauthConf.Exchange() failed with '%s'\n", err)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		appG.ResponseFailMsg(err.Error())
+		// c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
 
@@ -43,12 +49,31 @@ func CallBackGithub(c *gin.Context) {
 	user, _, err := client.Users.Get(oauth2.NoContext, "")
 	if err != nil {
 		fmt.Printf("client.Users.Get() faled with '%s'\n", err)
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		appG.ResponseFailMsg(err.Error())
+		// c.Redirect(http.StatusTemporaryRedirect, "/")
 		return
 	}
-	fmt.Printf("Logged in as GitHub user: %s\n", *user)
-	// TODO 将用户信息存入 数据库
-	appG := app.GetGin(c)
-	appG.ResponseSuc(*user)
+
+	// 3: Github
+	userID := strconv.FormatInt(*(user.ID), 10)
+
+	userService := user_service.UserOauth{OauthID: userID, OauthType: 3, OauthAccessToken: token.AccessToken, OauthExpires: "3600"}
+	exist, err := userService.ExistUserOauth()
+
+	if err != nil {
+		appG.ResponseFailMsg(err.Error())
+		return
+	}
+
+	if exist {
+		goto Success
+	}
+	// 不存在创建一个
+	if err := userService.LoginGithub(); err != nil {
+		appG.ResponseFailMsg(err.Error())
+		return
+	}
+Success:
+	appG.ResponseSuc(token.AccessToken)
 
 }
