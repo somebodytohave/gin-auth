@@ -37,7 +37,6 @@ func AddUserOauth(userOatuh map[string]interface{}) error {
 		OauthAccessToken: userOatuh["access_token"].(string),
 		OauthExpires:     userOatuh["expires"].(string),
 	}
-
 	if err := tx.Create(&oauthInfo).Error; err != nil {
 		tx.Rollback()
 		return err
