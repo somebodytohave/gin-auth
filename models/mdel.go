@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/mecm/gin-auth/pkg/logging"
-	"github.com/mecm/gin-auth/pkg/setting"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
+	"github.com/sun-wenming/gin-auth/pkg/setting"
 	"time"
 )
 

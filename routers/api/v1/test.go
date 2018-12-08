@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mecm/gin-auth/pkg/app"
+	"github.com/sun-wenming/gin-auth/pkg/app"
 )
 
 // TestAuth 测试认证

@@ -1,6 +1,7 @@
 # Go parameters
 GOCMD=go
 GOBUILD=$(GOCMD) build
+GOGET=$(GOCMD) get
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
@@ -8,13 +9,16 @@ GOLINT=$(GOCMD)lint
 BINARY_NAME=mybinary
 BINARY_UNIX=$(BINARY_NAME)_unix
 
-.PHONY: build clean tool lint help
+.PHONY: build get clean tool lint help
 
 
 all: build
 
 build:
 	$(GOBUILD) -v .
+
+get:
+	$(GOGET) ./... -v
 
 tool:
 	go tool vet . |& grep -v vendor \

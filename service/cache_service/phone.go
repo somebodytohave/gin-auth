@@ -1,7 +1,7 @@
 package cache_service
 
 import (
-	"github.com/mecm/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/e"
 )
 
 type Phone struct {

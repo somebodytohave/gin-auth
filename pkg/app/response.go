@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mecm/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/e"
 	"net/http"
 	"strconv"
 )

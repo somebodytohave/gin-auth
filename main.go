@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/mecm/gin-auth/models"
-	"github.com/mecm/gin-auth/pkg/gredis"
-	"github.com/mecm/gin-auth/pkg/logging"
-	"github.com/mecm/gin-auth/pkg/oauth"
-	"github.com/mecm/gin-auth/pkg/setting"
-	"github.com/mecm/gin-auth/routers"
+	"github.com/sun-wenming/gin-auth/models"
+	"github.com/sun-wenming/gin-auth/pkg/gredis"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
+	"github.com/sun-wenming/gin-auth/pkg/oauth"
+	"github.com/sun-wenming/gin-auth/pkg/setting"
+	"github.com/sun-wenming/gin-auth/routers"
 	"net/http"
 )
 

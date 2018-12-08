@@ -1,7 +1,7 @@
 package user_service
 
 import (
-	"github.com/mecm/gin-auth/models"
+	"github.com/sun-wenming/gin-auth/models"
 )
 
 // UserOauth UserOauth

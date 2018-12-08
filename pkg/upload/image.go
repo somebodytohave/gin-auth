@@ -8,10 +8,10 @@ import (
 	"path"
 	"strings"
 
-	"github.com/mecm/gin-auth/pkg/file"
-	"github.com/mecm/gin-auth/pkg/logging"
-	"github.com/mecm/gin-auth/pkg/setting"
-	"github.com/mecm/gin-auth/pkg/util"
+	"github.com/sun-wenming/gin-auth/pkg/file"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
+	"github.com/sun-wenming/gin-auth/pkg/setting"
+	"github.com/sun-wenming/gin-auth/pkg/util"
 )
 
 // GetImageFullUrl 获取图片完整访问URL

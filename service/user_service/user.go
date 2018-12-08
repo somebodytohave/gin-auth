@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mecm/gin-auth/models"
-	"github.com/mecm/gin-auth/pkg/e"
-	"github.com/mecm/gin-auth/pkg/gredis"
-	"github.com/mecm/gin-auth/pkg/logging"
-	"github.com/mecm/gin-auth/pkg/util"
-	"github.com/mecm/gin-auth/pkg/util/reg"
-	"github.com/mecm/gin-auth/pkg/util/valid"
-	"github.com/mecm/gin-auth/service/cache_service"
+	"github.com/sun-wenming/gin-auth/models"
+	"github.com/sun-wenming/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/gredis"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
+	"github.com/sun-wenming/gin-auth/pkg/util"
+	"github.com/sun-wenming/gin-auth/pkg/util/reg"
+	"github.com/sun-wenming/gin-auth/pkg/util/valid"
+	"github.com/sun-wenming/gin-auth/service/cache_service"
 )
 
 // User 用户

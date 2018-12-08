@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/mecm/gin-auth/pkg/logging"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
 )
 
 // MarkError 将错误 存入日志

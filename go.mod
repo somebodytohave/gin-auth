@@ -1,4 +1,4 @@
-module github.com/mecm/gin-auth
+module github.com/sun-wenming/gin-auth
 
 require (
 	github.com/Unknwon/com v0.0.0-20181010210213-41959bdd855f

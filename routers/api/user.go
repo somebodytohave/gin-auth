@@ -2,12 +2,12 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/mecm/gin-auth/pkg/app"
-	"github.com/mecm/gin-auth/pkg/e"
-	"github.com/mecm/gin-auth/pkg/util"
-	"github.com/mecm/gin-auth/pkg/util/reg"
-	"github.com/mecm/gin-auth/pkg/util/valid"
-	"github.com/mecm/gin-auth/service/user_service"
+	"github.com/sun-wenming/gin-auth/pkg/app"
+	"github.com/sun-wenming/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/util"
+	"github.com/sun-wenming/gin-auth/pkg/util/reg"
+	"github.com/sun-wenming/gin-auth/pkg/util/valid"
+	"github.com/sun-wenming/gin-auth/service/user_service"
 )
 
 type auth struct {
