@@ -36,7 +36,7 @@ clean:
 help:
 	@echo "make: compile packages and dependencies"
 	@echo "make pull: pull project from github and cp app.ini"
-	@echo "make download: download all go.mod packages"
+	@echo "make download: download all packages from go.mod"
 	@echo "make tool: run specified go tool"
 	@echo "make lint: golint ./..."
 	@echo "make clean: remove object files and cached files"
