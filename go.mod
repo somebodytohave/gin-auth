@@ -31,7 +31,7 @@ require (
 	github.com/uudashr/gopkgs v2.0.1+incompatible // indirect
 	golang.org/x/crypto v0.0.0-20181127143415-eb0de9b17e85
 	golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890
-	golang.org/x/tools v0.0.0-20181206194817-bcd4e47d0288 // indirect
+	golang.org/x/tools v0.0.0-20181207222222-4c874b978acb // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	gopkg.in/go-playground/validator.v9 v9.23.0
 )
