@@ -26,6 +26,7 @@ download:
 
 run:
 	./gin-auth
+	echo "gin-auth run success"
 
 tool:
 	go tool vet . |& grep -v vendor \
