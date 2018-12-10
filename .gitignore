@@ -16,3 +16,7 @@ docs
 
 # 运行的日志 以及上传的图片
 runtime
+
+# module 模式
+go.mod
+go.sum
