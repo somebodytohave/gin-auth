@@ -14,11 +14,11 @@ import (
 
 // InitRouter 返回 框架的实例 包含中间件 配置
 func InitRouter() *gin.Engine {
+	gin.SetMode(setting.ServerSetting.RunMode)
+	// 启动 gin
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-
-	gin.SetMode(setting.ServerSetting.RunMode)
 
 	// 根目录
 	root := r.Group("")

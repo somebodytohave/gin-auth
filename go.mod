@@ -2,6 +2,7 @@ module github.com/sun-wenming/gin-auth
 
 require (
 	github.com/Unknwon/com v0.0.0-20181010210213-41959bdd855f
+	github.com/boombuler/barcode v1.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
@@ -21,7 +22,7 @@ require (
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/pkg/errors v0.8.0 // indirect
 	github.com/swaggo/gin-swagger v1.0.0
-	github.com/swaggo/swag v1.4.0 // indirect
+	github.com/swaggo/swag v1.4.0
 	github.com/ugorji/go/codec v0.0.0-20181209151446-772ced7fd4c2 // indirect
 	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9
 	golang.org/x/net v0.0.0-20181207154023-610586996380 // indirect
