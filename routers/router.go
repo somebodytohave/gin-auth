@@ -42,6 +42,7 @@ func InitRouter() *gin.Engine {
 
 		// apiv1
 		apiv1 := root.Group("/api/v1")
+		apiv1.GET("/test11", v1.TestAuth)
 
 		apiv1.Use(jwt.JWT())
 		{
