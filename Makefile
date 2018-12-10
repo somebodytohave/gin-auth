@@ -25,8 +25,8 @@ download:
 	$(GOMOD) download
 
 run:
+	@echo "gin-auth are running"
 	./gin-auth
-	echo "gin-auth run success"
 
 tool:
 	go tool vet . |& grep -v vendor \
