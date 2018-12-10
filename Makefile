@@ -8,7 +8,7 @@ GOLINT=$(GOCMD)lint
 BINARY_NAME=mybinary
 BINARY_UNIX=$(BINARY_NAME)_unix
 
-.PHONY: all build pull download tool lint clean help
+.PHONY: all build pull download tool lint clean run help
 
 all: build
 
@@ -21,7 +21,11 @@ pull:
 	cp app.ini conf/app.ini
 
 download:
+	go mod init
 	$(GOMOD) download
+
+run:
+	./gin-auth
 
 tool:
 	go tool vet . |& grep -v vendor \
@@ -38,6 +42,7 @@ help:
 	@echo "make: compile packages and dependencies"
 	@echo "make pull: pull project from github and cp app.ini"
 	@echo "make download: download all packages from go.mod"
+	@echo "make run: run ./gin-auth"
 	@echo "make tool: run specified go tool"
 	@echo "make lint: golint ./..."
 	@echo "make clean: remove object files and cached files"
