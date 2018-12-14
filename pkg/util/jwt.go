@@ -12,21 +12,14 @@ var jwtSecret = []byte(setting.AppSetting.JwtSecret)
 // Claims 声明
 type Claims struct {
 	Username []byte `json:"username"`
-	Password string `json:"password"`
 	jwt.StandardClaims
 }
 
 // GenerateToken 生成 token
-func GenerateToken(username, password string) (string, error) {
+func GenerateToken(username string) (string, error) {
 
 	var err error
 	aesUsername, err := AesEncrypt([]byte(username))
-	if err != nil {
-		return "", err
-	}
-
-	// 单向加密
-	password, err = Encrypt(password)
 	if err != nil {
 		return "", err
 	}
@@ -37,7 +30,7 @@ func GenerateToken(username, password string) (string, error) {
 	expireTime := nowTime.Add(3 * time.Hour)
 	// 初始化 声明
 	claims := Claims{
-		aesUsername, password, jwt.StandardClaims{
+		aesUsername, jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "gin-auth",
 		},

@@ -62,7 +62,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 注册成功之后 make token
-	token, err := util.GenerateToken(mAuth.UserName, mAuth.PassWord)
+	token, err := util.GenerateToken(mAuth.UserName)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
@@ -107,7 +107,7 @@ func Login(c *gin.Context) {
 	}
 
 	// 生成token
-	token, err := util.GenerateToken(mAuth.UserName, mAuth.PassWord)
+	token, err := util.GenerateToken(mAuth.UserName)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
@@ -182,7 +182,7 @@ func PhoneLogin(c *gin.Context) {
 	}
 
 	// 登录 make token
-	token, err := util.GenerateToken(mAuth.Phone, mAuth.Code)
+	token, err := util.GenerateToken(mAuth.Phone)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
