@@ -1,4 +1,4 @@
-package users
+package userser
 
 import (
 	"github.com/sun-wenming/gin-auth/models/users"

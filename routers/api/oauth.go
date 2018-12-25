@@ -7,7 +7,7 @@ import (
 	"github.com/sun-wenming/gin-auth/pkg/app"
 	"github.com/sun-wenming/gin-auth/pkg/oauth"
 	"github.com/sun-wenming/gin-auth/pkg/util"
-	"github.com/sun-wenming/gin-auth/service/users"
+	"github.com/sun-wenming/gin-auth/service/userser"
 	"golang.org/x/oauth2"
 	"net/http"
 	"strconv"
@@ -57,7 +57,7 @@ func CallBackGithub(c *gin.Context) {
 	// 3: Github
 	userID := strconv.FormatInt(*(user.ID), 10)
 
-	userService := users.UserOauth{OauthID: userID, OauthType: 3, OauthAccessToken: token.AccessToken, OauthExpires: "3600"}
+	userService := userser.UserOauth{OauthID: userID, OauthType: 3, OauthAccessToken: token.AccessToken, OauthExpires: "3600"}
 	exist, err := userService.ExistUserOauth()
 
 	if err != nil {

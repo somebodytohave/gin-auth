@@ -7,7 +7,7 @@ import (
 	"github.com/sun-wenming/gin-auth/pkg/util"
 	"github.com/sun-wenming/gin-auth/pkg/util/reg"
 	"github.com/sun-wenming/gin-auth/pkg/util/valid"
-	"github.com/sun-wenming/gin-auth/service/users"
+	"github.com/sun-wenming/gin-auth/service/userser"
 )
 
 type auth struct {
@@ -42,7 +42,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	userService := users.User{UserName: mAuth.UserName, Password: mAuth.UserName}
+	userService := userser.User{UserName: mAuth.UserName, Password: mAuth.UserName}
 
 	// 判断是否存在
 	exist, err := userService.ExistByName()
@@ -95,7 +95,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	userService := users.User{
+	userService := userser.User{
 		UserName: mAuth.UserName,
 		Password: mAuth.PassWord,
 	}
@@ -155,7 +155,7 @@ func PhoneLogin(c *gin.Context) {
 	}
 
 	// 验证验证码
-	code := users.GetCacheCode(mAuth.Phone)
+	code := userser.GetCacheCode(mAuth.Phone)
 	if code == "" {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_CODE_EXPIRED)
 		return
@@ -165,7 +165,7 @@ func PhoneLogin(c *gin.Context) {
 		return
 	}
 
-	userService := users.User{UserName: mAuth.Phone, Code: mAuth.Code}
+	userService := userser.User{UserName: mAuth.Phone, Code: mAuth.Code}
 
 	// 判断是否存在
 	exist, err := userService.ExistByName()
@@ -201,7 +201,7 @@ func PhoneLogin(c *gin.Context) {
 func SendCode(c *gin.Context) {
 	appG := app.GetGin(c)
 	phone := c.PostForm("phone")
-	code, err := users.SendCode(phone)
+	code, err := userser.SendCode(phone)
 	if !reg.Phone(phone) {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_NOT_VALID)
 		return
@@ -230,7 +230,7 @@ func GetUserInfo(c *gin.Context) {
 		return
 	}
 	username := string(aesUsername)
-	userService := users.User{UserName: username}
+	userService := userser.User{UserName: username}
 
 	user, err := userService.GetUserInfo()
 	if err != nil {
