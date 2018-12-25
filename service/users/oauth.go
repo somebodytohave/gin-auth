@@ -27,6 +27,7 @@ func (o UserOauth) LoginGithub() error {
 	return users.AddUserOauth(maps)
 }
 
+// ExistUserOauth 存在第三方登录
 func (o UserOauth) ExistUserOauth() (bool, error) {
 	maps := map[string]interface{}{"oauth_id": o.OauthID}
 	return users.ExistUserOauth(maps)
