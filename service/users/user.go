@@ -1,17 +1,17 @@
-package user_service
+package users
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/sun-wenming/gin-auth/models"
+	"github.com/sun-wenming/gin-auth/models/users"
 	"github.com/sun-wenming/gin-auth/pkg/e"
 	"github.com/sun-wenming/gin-auth/pkg/gredis"
 	"github.com/sun-wenming/gin-auth/pkg/logging"
 	"github.com/sun-wenming/gin-auth/pkg/util"
 	"github.com/sun-wenming/gin-auth/pkg/util/reg"
 	"github.com/sun-wenming/gin-auth/pkg/util/valid"
-	"github.com/sun-wenming/gin-auth/service/cache_service"
+	"github.com/sun-wenming/gin-auth/service/caches"
 )
 
 // User 用户
@@ -40,7 +40,7 @@ func (u *User) Register() error {
 	maps["password"] = password
 
 	// 创建 用户信息 与 用户密码
-	return models.AddUserLogin(maps)
+	return users.AddUserLogin(maps)
 }
 
 // Login 登录用户
@@ -73,12 +73,12 @@ func (u *User) PhoneRegister() error {
 		"login_phone": u.UserName,
 	}
 	// 创建 用户信息 与 用户密码
-	return models.AddUserLogin(maps)
+	return users.AddUserLogin(maps)
 
 }
 
 // GetUserInfo 获取用户信息
-func (u *User) GetUserInfo() (*models.User, error) {
+func (u *User) GetUserInfo() (*users.User, error) {
 
 	userLogin, err := u.getUserLoginInfo()
 	if err != nil {
@@ -89,7 +89,7 @@ func (u *User) GetUserInfo() (*models.User, error) {
 		return nil, err
 	}
 
-	user, err := models.GetUser(userLogin.UserID)
+	user, err := users.GetUser(userLogin.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -109,26 +109,26 @@ func SendCode(phone string) (string, error) {
 		code = util.GetRandomCode()
 	}
 
-	cache := cache_service.Phone{Phone: phone}
+	cache := caches.Phone{Phone: phone}
 	key := cache.GetPhoneCodeKey()
 
 	// 发送验证码操作
 	// 十分钟验证码缓存
 	if err := gredis.Set(key, code, 600); err != nil {
-		logging.Warn(e.CACHE_ERROR_SET, err)
+		logging.Warn(caches.ErrorSet, err)
 	}
 	// 便于测试，code返回出去
 	return code, err
 }
 
-func (u *User) getUserLoginInfo() (*models.UserLogin, error) {
+func (u *User) getUserLoginInfo() (*users.UserLogin, error) {
 	maps := make(map[string]interface{})
 	maps, err := u.validUserName(maps)
 	if err != nil {
 		return nil, err
 	}
 	// 查询 用户登录信息
-	user, err := models.LoginUserLogin(maps)
+	user, err := users.LoginUserLogin(maps)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +141,7 @@ func existUserInfo(userID uint) error {
 		return errors.New(e.GetMsg(e.ERROR_USER_GET_INFO))
 	}
 
-	exist, err := models.ExistUserByID(userID)
+	exist, err := users.ExistUserByID(userID)
 	if err != nil {
 		return err
 	}
@@ -154,7 +154,7 @@ func existUserInfo(userID uint) error {
 
 // GetCacheCode 获取缓存的验证码
 func GetCacheCode(phone string) string {
-	cache := cache_service.Phone{Phone: phone}
+	cache := caches.Phone{Phone: phone}
 	key := cache.GetPhoneCodeKey()
 	fmt.Println(key)
 	if !gredis.Exists(key) {
@@ -163,7 +163,7 @@ func GetCacheCode(phone string) string {
 	var code string
 	data, err := gredis.Get(key)
 	if err != nil {
-		logging.Warn(e.CACHE_ERROR_GET, err)
+		logging.Warn(caches.ErrorGet, err)
 		return ""
 	}
 	json.Unmarshal(data, &code)
@@ -178,7 +178,7 @@ func (u *User) ExistByName() (bool, error) {
 	if err != nil {
 		return true, err
 	}
-	return models.ExistUserLogin(maps)
+	return users.ExistUserLogin(maps)
 }
 
 // 验证 用户名类型

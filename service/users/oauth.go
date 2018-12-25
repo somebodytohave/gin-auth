@@ -1,7 +1,7 @@
-package user_service
+package users
 
 import (
-	"github.com/sun-wenming/gin-auth/models"
+	"github.com/sun-wenming/gin-auth/models/users"
 )
 
 // UserOauth UserOauth
@@ -24,10 +24,10 @@ func (o UserOauth) LoginGithub() error {
 	maps["access_token"] = o.OauthAccessToken
 	maps["expires"] = o.OauthExpires
 
-	return models.AddUserOauth(maps)
+	return users.AddUserOauth(maps)
 }
 
 func (o UserOauth) ExistUserOauth() (bool, error) {
 	maps := map[string]interface{}{"oauth_id": o.OauthID}
-	return models.ExistUserOauth(maps)
+	return users.ExistUserOauth(maps)
 }

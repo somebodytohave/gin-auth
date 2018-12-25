@@ -1,13 +1,14 @@
-package models
+package users
 
 import (
 	"fmt"
+	"github.com/sun-wenming/gin-auth/models"
 
 	"github.com/jinzhu/gorm"
 )
 
-// UserOauth 第三方登录认证
-type UserOauth struct {
+// Oauth 第三方登录认证
+type Oauth struct {
 	ID               uint `gorm:"primary_key"`
 	UserID           uint
 	OauthType        uint   `json:"oauth_type"`
@@ -20,7 +21,7 @@ type UserOauth struct {
 // AddUserOauth 添加用户账号 与 初始化个人信息
 func AddUserOauth(userOatuh map[string]interface{}) error {
 
-	tx := db.Begin()
+	tx := models.DB.Begin()
 
 	// 首先创建 user
 	userID, err := addUser(tx)
@@ -30,7 +31,7 @@ func AddUserOauth(userOatuh map[string]interface{}) error {
 	}
 	fmt.Println(userOatuh)
 
-	oauthInfo := UserOauth{
+	oauthInfo := Oauth{
 		UserID:           userID,
 		OauthID:          userOatuh["oauth_id"].(string),
 		OauthType:        userOatuh["oauth_type"].(uint),
@@ -46,9 +47,9 @@ func AddUserOauth(userOatuh map[string]interface{}) error {
 }
 
 // LoginUserOauth 采用密码方式登录
-// func LoginUserOauth(maps map[string]interface{}) (*UserOauth, error) {
-// 	var user UserOauth
-// 	if err := db.Where(maps).First(&user).Error; err != nil {
+// func LoginUserOauth(maps map[string]interface{}) (*Oauth, error) {
+// 	var user Oauth
+// 	if err := DB.Where(maps).First(&user).Error; err != nil {
 // 		return nil, err
 // 	}
 // 	return &user, nil
@@ -56,8 +57,8 @@ func AddUserOauth(userOatuh map[string]interface{}) error {
 
 // ExistUserOauth 判断用户账号是否存在
 func ExistUserOauth(maps map[string]interface{}) (bool, error) {
-	var user UserOauth
-	err := db.Select("id").Where(maps).First(&user).Error
+	var user Oauth
+	err := models.DB.Select("id").Where(maps).First(&user).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}
