@@ -81,7 +81,6 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	appG := app.GetGin(c)
 	var mAuth auth
-
 	// 解析 body json 数据到实体类
 	if err := c.ShouldBindJSON(&mAuth); err != nil {
 		appG.ResponseFailMsg(err.Error())
@@ -100,14 +99,8 @@ func Login(c *gin.Context) {
 		Password: mAuth.PassWord,
 	}
 
+	token, err := userService.PwdLogin()
 	// 登录查询成功
-	if err := userService.Login(); err != nil {
-		appG.ResponseFailMsg(err.Error())
-		return
-	}
-
-	// 生成token
-	token, err := util.GenerateToken(mAuth.UserName)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return

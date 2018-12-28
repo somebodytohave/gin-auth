@@ -43,12 +43,12 @@ func (u *User) Register() error {
 	return users.AddUserLogin(maps)
 }
 
-// Login 登录用户
-func (u *User) Login() error {
+// PwdLogin 登录用户
+func (u *User) PwdLogin() (string, error) {
 
 	user, err := u.getUserLoginInfo()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	inputPwd := u.Password
@@ -56,14 +56,20 @@ func (u *User) Login() error {
 
 	// 比较 密码
 	if err := util.Compare(inputPwd, hashPwd); err != nil {
-		return err
+		return "", err
 	}
 
 	if err := existUserInfo(user.UserID); err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	// 生成token
+	token, err := util.GenerateToken(u.UserName)
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }
 
 // PhoneRegister 手机号注册
