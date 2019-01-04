@@ -175,12 +175,12 @@ func GetCacheCode(phone string) string {
 }
 
 // ExistByName 是否存在
-func (u *User) ExistByName() (bool, error) {
+func (u *User) ExistByName() (uint, error) {
 	maps := make(map[string]interface{})
 
 	maps, err := u.validUserName(maps)
 	if err != nil {
-		return true, err
+		return 0, err
 	}
 	return users.ExistUserLogin(maps)
 }

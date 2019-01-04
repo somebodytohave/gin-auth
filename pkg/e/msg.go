@@ -19,6 +19,8 @@ const (
 	ERROR_PHONE_NOT_VALID      = 40004
 	ERROR_PHONE_CODE_EXPIRED   = 40005
 	ERROR_PHONE_CODE_NOT_VALID = 40006
+	ERROR_USER_NAME_NOT_EXIST  = 40007
+	ERROR_USER_INFO_EMPTY      = 40008
 	// --- end
 )
 
@@ -37,6 +39,8 @@ var MsgFlags = map[int]string{
 	ERROR_PHONE_NOT_VALID:          "40004: 手机号验证失败.",
 	ERROR_PHONE_CODE_EXPIRED:       "40005: 验证码已过期.",
 	ERROR_PHONE_CODE_NOT_VALID:     "40006: 验证码验证失败.",
+	ERROR_USER_NAME_NOT_EXIST:      "40007: 用户名不存在.",
+	ERROR_USER_INFO_EMPTY:          "40008: 账号无对应用户信息.",
 }
 
 func GetMsg(code int) string {

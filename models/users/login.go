@@ -1,6 +1,8 @@
 package users
 
 import (
+	"github.com/sun-wenming/gin-auth/pkg/e"
+	"errors"
 	"fmt"
 	"github.com/sun-wenming/gin-auth/models"
 
@@ -75,18 +77,22 @@ func LoginUserLogin(maps map[string]interface{}) (*UserLogin, error) {
 	return &user, nil
 }
 
-// ExistUserLogin 判断用户账号是否存在
-func ExistUserLogin(maps map[string]interface{}) (bool, error) {
+
+// ExistUserLogin 返回用户ID
+func ExistUserLogin(maps map[string]interface{}) (uint, error) {
 	var user UserLogin
-	err := models.DB.Select("id").Where(maps).First(&user).Error
+	err := models.DB.Select("id,user_id").Where(maps).First(&user).Error
 
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
+		return 0, err
+	}
+	if user.ID < 1 { // 判断用户账号是否存在
+		return 0, errors.New(e.GetMsg(e.ERROR_USER_NAME_NOT_EXIST))
+	}
+	if user.UserID < 1 { // 判断用户信息是否存在
+		return 0, errors.New(e.GetMsg(e.ERROR_USER_INFO_EMPTY))
 	}
 
-	if user.ID > 0 {
-		return true, nil
-	}
-
-	return false, nil
+	return user.UserID, nil
 }
+

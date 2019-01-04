@@ -43,12 +43,13 @@ func Register(c *gin.Context) {
 	userService := userser.User{UserName: mAuth.UserName, Password: mAuth.UserName}
 
 	// 判断是否存在
-	exist, err := userService.ExistByName()
+	uid, err := userService.ExistByName()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
-	if exist {
+
+	if uid > 0 {
 		appG.ResponseFailMsg(e.GetMsg(e.ERROR_USER_NAME_EXIST))
 		return
 	}
@@ -159,13 +160,13 @@ func PhoneLogin(c *gin.Context) {
 	userService := userser.User{UserName: mAuth.Phone, Code: mAuth.Code}
 
 	// 判断是否存在
-	exist, err := userService.ExistByName()
+	uid, err := userService.ExistByName()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
 
-	if !exist { // 注册
+	if uid == 0 { // 注册
 		if err := userService.PhoneRegister(); err != nil {
 			appG.ResponseFailMsg(err.Error())
 			return
