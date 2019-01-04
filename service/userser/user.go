@@ -9,8 +9,6 @@ import (
 	"github.com/sun-wenming/gin-auth/pkg/gredis"
 	"github.com/sun-wenming/gin-auth/pkg/logging"
 	"github.com/sun-wenming/gin-auth/pkg/util"
-	"github.com/sun-wenming/gin-auth/pkg/util/reg"
-	"github.com/sun-wenming/gin-auth/pkg/util/valid"
 	"github.com/sun-wenming/gin-auth/service/caches"
 )
 
@@ -189,16 +187,16 @@ func (u *User) ExistByName() (bool, error) {
 
 // 验证 用户名类型
 func (u *User) validUserName(maps map[string]interface{}) (map[string]interface{}, error) {
-	if valid.Email(u.UserName) {
+	if util.ValidEmail(u.UserName) {
 		maps["login_email"] = u.UserName
 		return maps, nil
 	}
 	// 如果是手机号
-	if reg.Phone(u.UserName) {
+	if util.RegPhone(u.UserName) {
 		maps["login_phone"] = u.UserName
 		return maps, nil
 	}
-	if reg.UserName(u.UserName) {
+	if util.RegUserName(u.UserName) {
 		maps["login_name"] = u.UserName
 		return maps, nil
 	}

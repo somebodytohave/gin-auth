@@ -1,4 +1,4 @@
-package reg
+package util
 
 import (
 	"regexp"
@@ -15,10 +15,10 @@ var (
 	usernameRegex = regexp.MustCompile(regUserName)
 )
 
-func Phone(phone string) bool {
+func RegPhone(phone string) bool {
 	return phoneRegex.MatchString(phone)
 }
 
-func UserName(username string) bool {
+func RegUserName(username string) bool {
 	return usernameRegex.MatchString(username)
 }

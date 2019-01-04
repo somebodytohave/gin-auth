@@ -5,8 +5,6 @@ import (
 	"github.com/sun-wenming/gin-auth/pkg/app"
 	"github.com/sun-wenming/gin-auth/pkg/e"
 	"github.com/sun-wenming/gin-auth/pkg/util"
-	"github.com/sun-wenming/gin-auth/pkg/util/reg"
-	"github.com/sun-wenming/gin-auth/pkg/util/valid"
 	"github.com/sun-wenming/gin-auth/service/userser"
 )
 
@@ -35,7 +33,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	// 验证
-	validate := valid.GetValidate()
+	validate := util.GetValidate()
 	err := validate.Struct(mAuth)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
@@ -87,7 +85,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	// 验证
-	validate := valid.GetValidate()
+	validate := util.GetValidate()
 	err := validate.Struct(mAuth)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
@@ -135,14 +133,14 @@ func PhoneLogin(c *gin.Context) {
 		return
 	}
 	// 验证
-	validate := valid.GetValidate()
+	validate := util.GetValidate()
 	err := validate.Struct(mAuth)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
 
-	if !reg.Phone(mAuth.Phone) {
+	if !util.RegPhone(mAuth.Phone) {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_NOT_VALID)
 		return
 	}
@@ -195,7 +193,7 @@ func SendCode(c *gin.Context) {
 	appG := app.GetGin(c)
 	phone := c.PostForm("phone")
 	code, err := userser.SendCode(phone)
-	if !reg.Phone(phone) {
+	if !util.RegPhone(phone) {
 		appG.ResponseFailErrCode(e.ERROR_PHONE_NOT_VALID)
 		return
 	}
