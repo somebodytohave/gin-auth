@@ -18,7 +18,7 @@ var (
 type Model struct {
 	ID         uint      `gorm:"primary_key" json:"id"`
 	CreatedAt  time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+	UpdatedAt  time.Time `json:"updated_at "`
 	// * 代表 null
 	DeletedAt *time.Time `json:"deleted_at"`
 }

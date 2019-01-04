@@ -1,6 +1,9 @@
 package util
 
 import (
+	"github.com/sun-wenming/gin-auth/pkg/e"
+	"errors"
+	"github.com/gin-gonic/gin"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -11,15 +14,14 @@ var jwtSecret = []byte(setting.AppSetting.JwtSecret)
 
 // Claims 声明
 type Claims struct {
-	Username []byte `json:"username"`
+	LoginName []byte `json:"loginname"`
 	jwt.StandardClaims
 }
 
 // GenerateToken 生成 token
-func GenerateToken(username string) (string, error) {
-
+func GenerateToken(loginName string) (string, error) {
 	var err error
-	aesUsername, err := AesEncrypt([]byte(username))
+	aesLoginName, err := AesEncrypt([]byte(loginName))
 	if err != nil {
 		return "", err
 	}
@@ -30,9 +32,9 @@ func GenerateToken(username string) (string, error) {
 	expireTime := nowTime.Add(3 * time.Hour)
 	// 初始化 声明
 	claims := Claims{
-		aesUsername, jwt.StandardClaims{
+		aesLoginName, jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer:    "gin-auth",
+			Issuer:    "aims",
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -41,8 +43,14 @@ func GenerateToken(username string) (string, error) {
 }
 
 // ParseToken 解析 token
-func ParseToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+func ParseToken(c *gin.Context) (*Claims, error) {
+	token := c.Request.Header.Get("jwtToken")
+	return ParseToken2(token)
+}
+
+// ParseToken2 解析 token
+func ParseToken2(token string) (*Claims, error) {
+	tokenClaims, _ := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
 
@@ -51,5 +59,19 @@ func ParseToken(token string) (*Claims, error) {
 			return claims, nil
 		}
 	}
-	return nil, err
+	return nil, errors.New(e.GetMsg(e.ERROR_AUTH_CHECK_TOKEN_FAIL))
+}
+
+// GetTokenLoginName 根据 token 获取用户登录，用于去数据库获取用户id
+func GetTokenLoginName(c *gin.Context) (string, error) {
+	claims, err := ParseToken(c)
+	if err != nil {
+		return "", err
+	}
+	aesLoginName, err := AesDecrypt(claims.LoginName)
+	if err != nil {
+		return "", err
+	}
+	username := string(aesLoginName)
+	return username, nil
 }

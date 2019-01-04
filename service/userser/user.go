@@ -174,15 +174,26 @@ func GetCacheCode(phone string) string {
 	return code
 }
 
-// ExistByName 是否存在
-func (u *User) ExistByName() (uint, error) {
+// ExistByUserName 是否存在用户账号
+func (u *User) ExistByUserName() (bool, error) {
+	maps := make(map[string]interface{})
+
+	maps, err := u.validUserName(maps)
+	if err != nil {
+		return false, err
+	}
+	return users.ExistUserLogin(maps)
+}
+
+// UserLoginGetUserID 返回用户ID
+func (u *User) UserLoginGetUserID() (uint, error) {
 	maps := make(map[string]interface{})
 
 	maps, err := u.validUserName(maps)
 	if err != nil {
 		return 0, err
 	}
-	return users.ExistUserLogin(maps)
+	return users.UserLoginGetUserID(maps)
 }
 
 // 验证 用户名类型

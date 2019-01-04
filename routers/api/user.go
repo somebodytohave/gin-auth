@@ -43,13 +43,13 @@ func Register(c *gin.Context) {
 	userService := userser.User{UserName: mAuth.UserName, Password: mAuth.UserName}
 
 	// 判断是否存在
-	uid, err := userService.ExistByName()
+	exist, err := userService.ExistByUserName()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
 
-	if uid > 0 {
+	if exist {
 		appG.ResponseFailMsg(e.GetMsg(e.ERROR_USER_NAME_EXIST))
 		return
 	}
@@ -160,13 +160,13 @@ func PhoneLogin(c *gin.Context) {
 	userService := userser.User{UserName: mAuth.Phone, Code: mAuth.Code}
 
 	// 判断是否存在
-	uid, err := userService.ExistByName()
+	exist, err := userService.ExistByUserName()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
 
-	if uid == 0 { // 注册
+	if !exist { // 注册
 		if err := userService.PhoneRegister(); err != nil {
 			appG.ResponseFailMsg(err.Error())
 			return
@@ -211,29 +211,37 @@ func SendCode(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Tags user
 // @Produce  json
-// @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Success 200 {object} users.User
 // @Router /api/v1/user/getUserInfo [post]
 func GetUserInfo(c *gin.Context) {
 	appG := app.GetGin(c)
-	claims := getTokenInfo(c)
-	aesUsername, err := util.AesDecrypt(claims.Username)
+
+	username, err := util.GetTokenLoginName(c)
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
-	username := string(aesUsername)
-	userService := userser.User{UserName: username}
+
+	userService := userser.User{UserName:username}
+
+	// 判断是否存在
+	uid, err := userService.UserLoginGetUserID()
+	if err != nil {
+		appG.ResponseFailMsg(err.Error())
+		return
+	}
+	userService.ID = uid 
 
 	user, err := userService.GetUserInfo()
 	if err != nil {
 		appG.ResponseFailMsg(err.Error())
 		return
 	}
+
 	appG.ResponseSuc(user)
 }
 
 func getTokenInfo(c *gin.Context) *util.Claims {
-	token := c.Request.Header.Get("jwtToken")
-	claims, _ := util.ParseToken(token)
+	claims, _ := util.ParseToken(c)
 	return claims
 }

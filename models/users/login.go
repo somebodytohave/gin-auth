@@ -78,8 +78,22 @@ func LoginUserLogin(maps map[string]interface{}) (*UserLogin, error) {
 }
 
 
-// ExistUserLogin 返回用户ID
-func ExistUserLogin(maps map[string]interface{}) (uint, error) {
+// ExistUserLogin 判断是否存在此用户账号
+func ExistUserLogin(maps map[string]interface{}) (bool, error) {
+	var user UserLogin
+	err := models.DB.Select("id").Where(maps).First(&user).Error
+
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, err
+	}
+	if user.ID > 0{ 
+		return true,nil
+	}
+	return false, nil
+}
+
+// UserLoginGetUserID 通过用户名 获取 用户ID
+func UserLoginGetUserID(maps map[string]interface{}) (uint, error) {
 	var user UserLogin
 	err := models.DB.Select("id,user_id").Where(maps).First(&user).Error
 
