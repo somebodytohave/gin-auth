@@ -93,6 +93,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	// 传值
 	userService := userser.User{
 		UserName: mAuth.UserName,
 		Password: mAuth.PassWord,
@@ -241,7 +242,3 @@ func GetUserInfo(c *gin.Context) {
 	appG.ResponseSuc(user)
 }
 
-func getTokenInfo(c *gin.Context) *util.Claims {
-	claims, _ := util.ParseToken(c)
-	return claims
-}

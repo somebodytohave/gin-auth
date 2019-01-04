@@ -83,17 +83,7 @@ func (u *User) PhoneRegister() error {
 
 // GetUserInfo 获取用户信息
 func (u *User) GetUserInfo() (*users.User, error) {
-
-	userLogin, err := u.getUserLoginInfo()
-	if err != nil {
-		return nil, err
-	}
-	// 是否存在用户
-	if err := existUserInfo(userLogin.UserID); err != nil {
-		return nil, err
-	}
-
-	user, err := users.GetUser(userLogin.UserID)
+	user, err := users.GetUser(u.ID)
 	if err != nil {
 		return nil, err
 	}
