@@ -33,8 +33,7 @@ func Setup() {
 		setting.DatabaseSetting.Name))
 
 	if err != nil {
-		fmt.Println(err.Error())
-		logging.Error(err.Error())
+		logging.GetLogger().Fatalln(err)
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {

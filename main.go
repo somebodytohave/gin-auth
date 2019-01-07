@@ -32,7 +32,7 @@ func main() {
 	// 缓存 redis
 	err := gredis.Setup()
 	if err != nil {
-		logging.Warn(err)
+		logging.GetLogger().Fatalln(err)
 	}
 	oauth.Setup()
 

@@ -109,7 +109,7 @@ func SendCode(phone string) (string, error) {
 	// 发送验证码操作
 	// 十分钟验证码缓存
 	if err := gredis.Set(key, code, 600); err != nil {
-		logging.Warn(caches.ErrorSet, err)
+		logging.GetLogger().Warn(caches.ErrorSet, err)
 	}
 	// 便于测试，code返回出去
 	return code, err
@@ -157,7 +157,7 @@ func GetCacheCode(phone string) string {
 	var code string
 	data, err := gredis.Get(key)
 	if err != nil {
-		logging.Warn(caches.ErrorGet, err)
+		logging.GetLogger().Warn(caches.ErrorGet, err)
 		return ""
 	}
 	json.Unmarshal(data, &code)
