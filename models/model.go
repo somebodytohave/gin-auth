@@ -45,6 +45,8 @@ func Setup() {
 	DB.DB().SetMaxIdleConns(10)
 	DB.DB().SetMaxOpenConns(100)
 	DB.LogMode(setting.DatabaseSetting.LogMode)
+	DB.SetLogger(logging.GetLogger())
+
 }
 
 // CloseDB 关闭

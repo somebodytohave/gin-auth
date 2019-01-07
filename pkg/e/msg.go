@@ -3,7 +3,6 @@ package e
 const (
 	SUCCESS                      = 200
 	ERROR                        = 500
-	INVALID_PARAMS               = 400
 	INVALID_PARAMS_WITHOUT_TOKEN = 401
 
 	// 认证
@@ -21,13 +20,14 @@ const (
 	ERROR_PHONE_CODE_NOT_VALID = 40006
 	ERROR_USER_NAME_NOT_EXIST  = 40007
 	ERROR_USER_INFO_EMPTY      = 40008
+	ERROR_INVALID_PARAMS       = 40009
 	// --- end
 )
 
 var MsgFlags = map[int]string{
 	SUCCESS:                        "ok",
 	ERROR:                          "fail",
-	INVALID_PARAMS:                 "请求参数错误",
+	ERROR_INVALID_PARAMS:           "请求参数错误",
 	INVALID_PARAMS_WITHOUT_TOKEN:   "不存在Token参数",
 	ERROR_AUTH_CHECK_TOKEN_FAIL:    "Token鉴权失败",
 	ERROR_AUTH_CHECK_TOKEN_TIMEOUT: "Token已超时",

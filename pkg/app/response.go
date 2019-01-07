@@ -1,9 +1,13 @@
 package app
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/sun-wenming/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/util"
+	"gopkg.in/go-playground/validator.v9"
 	"net/http"
+	"reflect"
 	"strconv"
 )
 
@@ -72,6 +76,20 @@ func (g *Gin) ResponseFailMsg(msg string) {
 	MarkError(msg)
 	g.C.JSON(http.StatusOK, gin.H{
 		"code": http.StatusBadRequest,
+		"msg":  msg,
+		"data": nil,
+	})
+	return
+}
+// ResponseFailValidParam 验证参数错误
+func (g *Gin) ResponseFailValidParam(err error) {
+	fmt.Println(reflect.TypeOf(err))
+	//fmt.Println(.Translate(util.GetTrans()))
+	errs := err.(validator.ValidationErrors)
+	msg := errs[0].Translate(util.GetTrans())
+	MarkError(msg)
+	g.C.JSON(http.StatusOK, gin.H{
+		"code": e.ERROR_INVALID_PARAMS,
 		"msg":  msg,
 		"data": nil,
 	})

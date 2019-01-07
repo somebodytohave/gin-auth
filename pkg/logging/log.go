@@ -29,6 +29,8 @@ const (
 	WARNING
 	ERROR
 	FATAL
+	Print
+	Println
 )
 
 func Setup() {
@@ -41,6 +43,11 @@ func Setup() {
 	}
 
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
+}
+
+// GetLogger Logger
+func GetLogger() *log.Logger {
+	return logger
 }
 
 func Debug(v ...interface{}) {

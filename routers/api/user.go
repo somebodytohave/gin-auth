@@ -36,7 +36,7 @@ func Register(c *gin.Context) {
 	validate := util.GetValidate()
 	err := validate.Struct(mAuth)
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailValidParam(err)
 		return
 	}
 
@@ -76,6 +76,7 @@ func Register(c *gin.Context) {
 // @Produce  json
 // @Param auth body api.auth true "用户信息"
 // @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
+// @Failure 204 {object} json "{"code":200,"data":{},"msg":"ok"}"
 // @Router /auth/login [post]
 func Login(c *gin.Context) {
 	appG := app.GetGin(c)
@@ -89,7 +90,7 @@ func Login(c *gin.Context) {
 	validate := util.GetValidate()
 	err := validate.Struct(mAuth)
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailValidParam(err)
 		return
 	}
 
@@ -138,7 +139,7 @@ func PhoneLogin(c *gin.Context) {
 	validate := util.GetValidate()
 	err := validate.Struct(mAuth)
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailValidParam(err)
 		return
 	}
 
