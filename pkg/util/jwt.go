@@ -1,12 +1,13 @@
 package util
 
 import (
-	"github.com/sun-wenming/gin-auth/pkg/e"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/sun-wenming/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/sun-wenming/gin-auth/pkg/setting"
 )
 
@@ -59,18 +60,20 @@ func ParseToken2(token string) (*Claims, error) {
 			return claims, nil
 		}
 	}
-	return nil, errors.New(e.GetMsg(e.ERROR_AUTH_CHECK_TOKEN_FAIL))
+	return nil, errors.New(e.GetMsg(e.ErrorAuthParseTokenFail))
 }
 
 // GetTokenLoginName 根据 token 获取用户登录，用于去数据库获取用户id
-func GetTokenLoginName(c *gin.Context) (string, error) {
+func GetTokenLoginName(c *gin.Context) (string, Error) {
 	claims, err := ParseToken(c)
 	if err != nil {
-		return "", err
+		logging.GetLogger().Error(err)
+		return "", ErrNewCode(e.ErrorAuthParseTokenFail)
 	}
 	aesLoginName, err := AesDecrypt(claims.LoginName)
 	if err != nil {
-		return "", err
+		logging.GetLogger().Error(err)
+		return "", ErrNewCode(e.ErrorAuthParseTokenFail)
 	}
 	username := string(aesLoginName)
 	return username, nil

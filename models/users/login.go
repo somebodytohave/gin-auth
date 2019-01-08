@@ -1,12 +1,11 @@
 package users
 
 import (
-	"github.com/sun-wenming/gin-auth/pkg/e"
-	"errors"
-	"fmt"
-	"github.com/sun-wenming/gin-auth/models"
-
 	"github.com/jinzhu/gorm"
+	"github.com/sun-wenming/gin-auth/models"
+	"github.com/sun-wenming/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
+	"github.com/sun-wenming/gin-auth/pkg/util"
 )
 
 // UserLogin 用户密码登陆认证
@@ -26,7 +25,7 @@ func codeLogin() {
 }
 
 // AddUserLogin 添加用户账号 与 初始化个人信息
-func AddUserLogin(userLogin map[string]interface{}) error {
+func AddUserLogin(userLogin map[string]interface{}) util.Error {
 
 	tx := models.DB.Begin()
 
@@ -34,9 +33,9 @@ func AddUserLogin(userLogin map[string]interface{}) error {
 	userID, err := addUser(tx)
 	if err != nil {
 		tx.Rollback()
-		return err
+		logging.GetLogger().Error(err)
+		return util.ErrNewCode(e.ErrorUserInfoCreate)
 	}
-	fmt.Println(userLogin)
 
 	loginInfo := UserLogin{
 		UserID: userID,
@@ -58,55 +57,55 @@ func AddUserLogin(userLogin map[string]interface{}) error {
 		loginInfo.LoginEmail = userLogin["login_email"].(string)
 	}
 InsertLogin:
-	fmt.Println(loginInfo)
 
 	if err := tx.Create(&loginInfo).Error; err != nil {
 		tx.Rollback()
-		return err
+		logging.GetLogger().Error(err)
+		return util.ErrNewCode(e.ErrorUserLoginCreate)
 	}
 	tx.Commit()
 	return nil
 }
 
 // LoginUserLogin 采用密码方式登录
-func LoginUserLogin(maps map[string]interface{}) (*UserLogin, error) {
+func LoginUserLogin(maps map[string]interface{}) (*UserLogin, util.Error) {
 	var user UserLogin
 	if err := models.DB.Where(maps).First(&user).Error; err != nil {
-		return nil, err
+		logging.GetLogger().Error(err)
+		return nil, util.ErrNewSql(err)
 	}
 	return &user, nil
 }
 
-
 // ExistUserLogin 判断是否存在此用户账号
-func ExistUserLogin(maps map[string]interface{}) (bool, error) {
+func ExistUserLogin(maps map[string]interface{}) (bool, util.Error) {
 	var user UserLogin
 	err := models.DB.Select("id").Where(maps).First(&user).Error
 
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
+		logging.GetLogger().Error(err)
+		return false, util.ErrNewCode(e.ErrorUserGetLogin)
 	}
-	if user.ID > 0{ 
-		return true,nil
+	if user.ID > 0 {
+		return true, nil
 	}
 	return false, nil
 }
 
 // UserLoginGetUserID 通过用户名 获取 用户ID
-func UserLoginGetUserID(maps map[string]interface{}) (uint, error) {
+func UserLoginGetUserID(maps map[string]interface{}) (uint, util.Error) {
 	var user UserLogin
 	err := models.DB.Select("id,user_id").Where(maps).First(&user).Error
 
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return 0, err
+		return 0, util.ErrNewSql(err)
 	}
 	if user.ID < 1 { // 判断用户账号是否存在
-		return 0, errors.New(e.GetMsg(e.ERROR_USER_NAME_NOT_EXIST))
+		return 0, util.ErrNewCode(e.ErrorUserNameNotExist)
 	}
 	if user.UserID < 1 { // 判断用户信息是否存在
-		return 0, errors.New(e.GetMsg(e.ERROR_USER_INFO_EMPTY))
+		return 0, util.ErrNewCode(e.ErrorUserInfoEmpty)
 	}
 
 	return user.UserID, nil
 }
-

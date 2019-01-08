@@ -71,15 +71,28 @@ func (g *Gin) ResponseFailErrCode(errCode int) {
 }
 
 // ResponseFailMsg 返回失败
-func (g *Gin) ResponseFailMsg(msg string) {
+//func (g *Gin) ResponseFailMsg(msg string) {
+//	MarkError(msg)
+//	g.C.JSON(http.StatusOK, gin.H{
+//		"code": http.StatusBadRequest,
+//		"msg":  msg,
+//		"data": nil,
+//	})
+//	return
+//}
+
+// ResponseFailError 返回自定义的错误类型
+func (g *Gin) ResponseFailError(error util.Error) {
+	msg := error.Error()
 	MarkError(msg)
 	g.C.JSON(http.StatusOK, gin.H{
-		"code": http.StatusBadRequest,
+		"code": error.Code(),
 		"msg":  msg,
 		"data": nil,
 	})
 	return
 }
+
 // ResponseFailValidParam 验证参数错误
 func (g *Gin) ResponseFailValidParam(err error) {
 	errs := err.(validator.ValidationErrors)
@@ -92,7 +105,7 @@ func (g *Gin) ResponseFailValidParam(err error) {
 
 	MarkError(msg)
 	g.C.JSON(http.StatusOK, gin.H{
-		"code": e.ERROR_INVALID_PARAMS,
+		"code": e.ErrorInvalidParams,
 		"msg":  msg,
 		"data": nil,
 	})

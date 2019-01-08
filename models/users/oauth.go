@@ -3,6 +3,9 @@ package users
 import (
 	"fmt"
 	"github.com/sun-wenming/gin-auth/models"
+	"github.com/sun-wenming/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
+	"github.com/sun-wenming/gin-auth/pkg/util"
 
 	"github.com/jinzhu/gorm"
 )
@@ -19,7 +22,7 @@ type Oauth struct {
 }
 
 // AddUserOauth 添加用户账号 与 初始化个人信息
-func AddUserOauth(userOatuh map[string]interface{}) error {
+func AddUserOauth(userOatuh map[string]interface{}) util.Error {
 
 	tx := models.DB.Begin()
 
@@ -27,7 +30,7 @@ func AddUserOauth(userOatuh map[string]interface{}) error {
 	userID, err := addUser(tx)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return util.ErrNewCode(e.ErrorUserInfoCreate)
 	}
 	fmt.Println(userOatuh)
 
@@ -40,7 +43,8 @@ func AddUserOauth(userOatuh map[string]interface{}) error {
 	}
 	if err := tx.Create(&oauthInfo).Error; err != nil {
 		tx.Rollback()
-		return err
+		logging.GetLogger().Error(err)
+		return util.ErrNewCode(e.ErrorUserLoginCreate)
 	}
 	tx.Commit()
 	return nil
@@ -56,11 +60,12 @@ func AddUserOauth(userOatuh map[string]interface{}) error {
 // }
 
 // ExistUserOauth 判断用户账号是否存在
-func ExistUserOauth(maps map[string]interface{}) (bool, error) {
+func ExistUserOauth(maps map[string]interface{}) (bool, util.Error) {
 	var user Oauth
 	err := models.DB.Select("id").Where(maps).First(&user).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
+		logging.GetLogger().Error(err)
+		return false, util.ErrNewCode(e.ErrorUserLoginEmpty)
 	}
 
 	if user.ID > 0 {

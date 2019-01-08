@@ -61,6 +61,7 @@ func ValidEmail(email string) bool {
 
 
 // 自定义字段名称
+// 参考自 : https://github.com/syssam/go-playground-sample/blob/master/main.go
 func customFieldName() {
 	var errAdd error
 	errAdd = trans.Add("{{username}}", "用户名", false)

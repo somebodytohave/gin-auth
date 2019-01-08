@@ -2,7 +2,6 @@ package userser
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/sun-wenming/gin-auth/models/users"
 	"github.com/sun-wenming/gin-auth/pkg/e"
@@ -22,7 +21,7 @@ type User struct {
 }
 
 // Register 注册用户
-func (u *User) Register() error {
+func (u *User) Register() util.Error {
 	maps := make(map[string]interface{})
 	maps, err := u.validUserName(maps)
 	if err != nil {
@@ -42,7 +41,7 @@ func (u *User) Register() error {
 }
 
 // PwdLogin 登录用户
-func (u *User) PwdLogin() (string, error) {
+func (u *User) PwdLogin() (string, util.Error) {
 
 	user, err := u.getUserLoginInfo()
 	if err != nil {
@@ -54,7 +53,7 @@ func (u *User) PwdLogin() (string, error) {
 
 	// 比较 密码
 	if err := util.Compare(inputPwd, hashPwd); err != nil {
-		return "", err
+		return "", util.ErrNewCode(e.ErrorUserNameExist)
 	}
 
 	if err := existUserInfo(user.UserID); err != nil {
@@ -62,16 +61,17 @@ func (u *User) PwdLogin() (string, error) {
 	}
 
 	// 生成token
-	token, err := util.GenerateToken(u.UserName)
-	if err != nil {
-		return "", err
+	token, merr := util.GenerateToken(u.UserName)
+	if merr != nil {
+		logging.GetLogger().Error(merr)
+		return "", util.ErrNewCode(e.ErrorAuthGenerateToken)
 	}
 
 	return token, nil
 }
 
 // PhoneRegister 手机号注册
-func (u *User) PhoneRegister() error {
+func (u *User) PhoneRegister() util.Error {
 
 	maps := map[string]interface{}{
 		"login_phone": u.UserName,
@@ -82,17 +82,13 @@ func (u *User) PhoneRegister() error {
 }
 
 // GetUserInfo 获取用户信息
-func (u *User) GetUserInfo() (*users.User, error) {
-	user, err := users.GetUser(u.ID)
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
+func (u *User) GetUserInfo() (*users.User,  util.Error) {
+	return users.GetUser(u.ID)
 
 }
 
 // SendCode 发送手机验证码
-func SendCode(phone string) (string, error) {
+func SendCode(phone string) (string, util.Error) {
 	var (
 		code string
 		err  error
@@ -111,11 +107,15 @@ func SendCode(phone string) (string, error) {
 	if err := gredis.Set(key, code, 600); err != nil {
 		logging.GetLogger().Warn(caches.ErrorSet, err)
 	}
+	if err != nil {
+		logging.GetLogger().Error(err)
+		return "", util.ErrNewCode(e.ErrorPhoneCodeNotValid)
+	}
 	// 便于测试，code返回出去
-	return code, err
+	return code, nil
 }
 
-func (u *User) getUserLoginInfo() (*users.UserLogin, error) {
+func (u *User) getUserLoginInfo() (*users.UserLogin, util.Error) {
 	maps := make(map[string]interface{})
 	maps, err := u.validUserName(maps)
 	if err != nil {
@@ -126,13 +126,13 @@ func (u *User) getUserLoginInfo() (*users.UserLogin, error) {
 	if err != nil {
 		return nil, err
 	}
-	return user, err
+	return user, nil
 }
 
-func existUserInfo(userID uint) error {
+func existUserInfo(userID uint)  util.Error {
 	// 匹配成功  根据 userID 查询 用户信息
 	if !(userID > 0) {
-		return errors.New(e.GetMsg(e.ERROR_USER_GET_INFO))
+		return util.ErrNewCode(e.ErrorUserGetInfo)
 	}
 
 	exist, err := users.ExistUserByID(userID)
@@ -141,7 +141,7 @@ func existUserInfo(userID uint) error {
 	}
 
 	if !exist {
-		return errors.New(e.GetMsg(e.ERROR_USER_GET_INFO))
+		return util.ErrNewCode(e.ErrorUserInfoEmpty)
 	}
 	return nil
 }
@@ -165,7 +165,7 @@ func GetCacheCode(phone string) string {
 }
 
 // ExistByUserName 是否存在用户账号
-func (u *User) ExistByUserName() (bool, error) {
+func (u *User) ExistByUserName() (bool, util.Error) {
 	maps := make(map[string]interface{})
 
 	maps, err := u.validUserName(maps)
@@ -176,7 +176,7 @@ func (u *User) ExistByUserName() (bool, error) {
 }
 
 // UserLoginGetUserID 返回用户ID
-func (u *User) UserLoginGetUserID() (uint, error) {
+func (u *User) UserLoginGetUserID() (uint, util.Error) {
 	maps := make(map[string]interface{})
 
 	maps, err := u.validUserName(maps)
@@ -187,7 +187,7 @@ func (u *User) UserLoginGetUserID() (uint, error) {
 }
 
 // 验证 用户名类型
-func (u *User) validUserName(maps map[string]interface{}) (map[string]interface{}, error) {
+func (u *User) validUserName(maps map[string]interface{}) (map[string]interface{}, util.Error) {
 	if util.ValidEmail(u.UserName) {
 		maps["login_email"] = u.UserName
 		return maps, nil
@@ -201,5 +201,5 @@ func (u *User) validUserName(maps map[string]interface{}) (map[string]interface{
 		maps["login_name"] = u.UserName
 		return maps, nil
 	}
-	return nil, errors.New(e.GetMsg(e.ERROR_USER_REG_NAME))
+	return nil, util.ErrNewCode(e.ErrorUserRegName)
 }

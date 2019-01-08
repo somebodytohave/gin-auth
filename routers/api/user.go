@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sun-wenming/gin-auth/pkg/app"
 	"github.com/sun-wenming/gin-auth/pkg/e"
+	"github.com/sun-wenming/gin-auth/pkg/logging"
 	"github.com/sun-wenming/gin-auth/pkg/util"
 	"github.com/sun-wenming/gin-auth/service/userser"
 )
@@ -29,7 +30,7 @@ func Register(c *gin.Context) {
 
 	// 解析 body json 数据到实体类
 	if err := c.ShouldBindJSON(&mAuth); err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(util.ErrNewErr(err))
 		return
 	}
 	// 验证
@@ -45,25 +46,26 @@ func Register(c *gin.Context) {
 	// 判断是否存在
 	exist, err := userService.ExistByUserName()
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(util.ErrNewCode(e.ErrorUserNameNotExist))
 		return
 	}
 
 	if exist {
-		appG.ResponseFailMsg(e.GetMsg(e.ERROR_USER_NAME_EXIST))
+		appG.ResponseFailError(util.ErrNewCode(e.ErrorUserNameExist))
 		return
 	}
 
 	// 注册
 	if err := userService.Register(); err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(err)
 		return
 	}
 
 	// 注册成功之后 make token
 	token, err := util.GenerateToken(mAuth.UserName)
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		logging.GetLogger().Error(err)
+		appG.ResponseFailError(util.ErrNewCode(e.ErrorAuthGenerateToken))
 		return
 	}
 	appG.ResponseSuc(token)
@@ -83,7 +85,7 @@ func Login(c *gin.Context) {
 	var mAuth auth
 	// 解析 body json 数据到实体类
 	if err := c.ShouldBindJSON(&mAuth); err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(util.ErrNewErr(err))
 		return
 	}
 	// 验证
@@ -100,10 +102,10 @@ func Login(c *gin.Context) {
 		Password: mAuth.PassWord,
 	}
 
-	token, err := userService.PwdLogin()
+	token, merr := userService.PwdLogin()
 	// 登录查询成功
-	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+	if merr != nil {
+		appG.ResponseFailError(merr)
 		return
 	}
 
@@ -132,7 +134,7 @@ func PhoneLogin(c *gin.Context) {
 
 	// 解析 body json 数据到实体类
 	if err := c.ShouldBindJSON(&mAuth); err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(util.ErrNewErr(err))
 		return
 	}
 	// 验证
@@ -144,33 +146,33 @@ func PhoneLogin(c *gin.Context) {
 	}
 
 	if !util.RegPhone(mAuth.Phone) {
-		appG.ResponseFailErrCode(e.ERROR_PHONE_NOT_VALID)
+		appG.ResponseFailErrCode(e.ErrorPhoneNotValid)
 		return
 	}
 
 	// 验证验证码
 	code := userser.GetCacheCode(mAuth.Phone)
 	if code == "" {
-		appG.ResponseFailErrCode(e.ERROR_PHONE_CODE_EXPIRED)
+		appG.ResponseFailErrCode(e.ErrorPhoneCodeExpired)
 		return
 	}
 	if mAuth.Code != code {
-		appG.ResponseFailErrCode(e.ERROR_PHONE_CODE_NOT_VALID)
+		appG.ResponseFailErrCode(e.ErrorPhoneCodeNotValid)
 		return
 	}
 
 	userService := userser.User{UserName: mAuth.Phone, Code: mAuth.Code}
 
 	// 判断是否存在
-	exist, err := userService.ExistByUserName()
-	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+	exist, merr := userService.ExistByUserName()
+	if merr != nil {
+		appG.ResponseFailError(merr)
 		return
 	}
 
 	if !exist { // 注册
 		if err := userService.PhoneRegister(); err != nil {
-			appG.ResponseFailMsg(err.Error())
+			appG.ResponseFailError(err)
 			return
 		}
 	}
@@ -178,7 +180,8 @@ func PhoneLogin(c *gin.Context) {
 	// 登录 make token
 	token, err := util.GenerateToken(mAuth.Phone)
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		logging.GetLogger().Error(err)
+		appG.ResponseFailError(util.ErrNewCode(e.ErrorAuthGenerateToken))
 		return
 	}
 	appG.ResponseSuc(token)
@@ -197,12 +200,12 @@ func SendCode(c *gin.Context) {
 	phone := c.PostForm("phone")
 	code, err := userser.SendCode(phone)
 	if !util.RegPhone(phone) {
-		appG.ResponseFailErrCode(e.ERROR_PHONE_NOT_VALID)
+		appG.ResponseFailErrCode(e.ErrorPhoneNotValid)
 		return
 	}
 
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(err)
 	}
 	appG.ResponseSuc(code)
 }
@@ -220,26 +223,25 @@ func GetUserInfo(c *gin.Context) {
 
 	username, err := util.GetTokenLoginName(c)
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(err)
 		return
 	}
 
-	userService := userser.User{UserName:username}
+	userService := userser.User{UserName: username}
 
 	// 判断是否存在
 	uid, err := userService.UserLoginGetUserID()
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(err)
 		return
 	}
-	userService.ID = uid 
+	userService.ID = uid
 
 	user, err := userService.GetUserInfo()
 	if err != nil {
-		appG.ResponseFailMsg(err.Error())
+		appG.ResponseFailError(err)
 		return
 	}
 
 	appG.ResponseSuc(user)
 }
-
