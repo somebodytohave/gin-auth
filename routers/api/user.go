@@ -41,7 +41,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	userService := userser.User{UserName: mAuth.UserName, Password: mAuth.UserName}
+	userService := userser.User{UserName: mAuth.UserName, Password: mAuth.PassWord}
 
 	// 判断是否存在
 	exist, err := userService.ExistByUserName()
