@@ -20,3 +20,5 @@ runtime
 # module 模式
 go.mod
 go.sum
+
+.idea
